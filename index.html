@@ -54,24 +54,6 @@
                 <button id="logoutBtn" class="text-sm text-gray-500 hover:text-red-500 transition-colors">Log Out</button>
             </div>
 
-            <!-- New Dashboard Summary -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
-                <div class="bg-indigo-50 p-6 rounded-lg border border-indigo-200">
-                    <h3 class="text-xl font-semibold text-indigo-800 mb-2">My Rank</h3>
-                    <p class="text-4xl font-bold text-indigo-600">
-                        <span id="percentileValue">--</span><span class="text-2xl">%</span>
-                    </p>
-                    <p class="text-sm text-indigo-500">Percentile in class</p>
-                </div>
-                <div class="bg-green-50 p-6 rounded-lg border border-green-200">
-                    <h3 class="text-xl font-semibold text-green-800 mb-2">Badges</h3>
-                    <div id="badgeContainer" class="flex flex-wrap gap-4 items-center justify-center">
-                        <i class="fas fa-award text-gray-400 badge-icon"></i>
-                        <span class="text-gray-500 text-sm">No badges yet</span>
-                    </div>
-                </div>
-            </div>
-
             <!-- Quiz & Tracker Section -->
             <div class="mb-8 p-6 bg-blue-50 rounded-lg border border-blue-200">
                 <h2 class="text-2xl font-semibold text-blue-800 mb-4">Take a Quiz</h2>
@@ -169,8 +151,6 @@
         const authStatus = document.getElementById('authStatus');
         const welcomeName = document.getElementById('welcomeName');
         const welcomeClass = document.getElementById('welcomeClass');
-        const percentileValue = document.getElementById('percentileValue');
-        const badgeContainer = document.getElementById('badgeContainer');
         const topicInput = document.getElementById('topicInput');
         const startQuizBtn = document.getElementById('startQuizBtn');
         const summaryContainer = document.getElementById('summaryContainer');
@@ -206,178 +186,185 @@
         const quizData = {
             "Physics": [
                 {
-                    "subtopic": "Force & Motion",
-                    "questionNumber": 1,
-                    "question": "What is the SI unit of force?",
+                    "subtopic": "Motion",
+                    "question": "What is the speed of an object that travels 100 meters in 10 seconds?",
                     "answerOptions": [
-                        {"text": "Joule", "rationale": "Joule is the SI unit of energy and work.", "isCorrect": false},
-                        {"text": "Newton", "rationale": "The Newton is the SI unit of force, defined as the force needed to accelerate a kilogram of mass by one meter per second squared.", "isCorrect": true},
-                        {"text": "Watt", "rationale": "Watt is the SI unit of power.", "isCorrect": false},
-                        {"text": "Pascal", "rationale": "Pascal is the SI unit of pressure.", "isCorrect": false}
+                        {"text": "10 m/s", "rationale": "Speed is calculated as distance divided by time (100m / 10s = 10m/s).", "isCorrect": true},
+                        {"text": "1000 m/s", "rationale": "This would be the product of distance and time.", "isCorrect": false},
+                        {"text": "100 m/s", "rationale": "This is just the distance.", "isCorrect": false},
+                        {"text": "10 s/m", "rationale": "The units are incorrect for speed.", "isCorrect": false}
                     ],
-                    "hint": "The unit is named after a famous scientist who developed the laws of motion."
-                },
-                {
-                    "subtopic": "Force & Motion",
-                    "questionNumber": 2,
-                    "question": "Which of Newton's laws of motion states that for every action, there is an equal and opposite reaction?",
-                    "answerOptions": [
-                        {"text": "First Law", "rationale": "The first law describes inertia.", "isCorrect": false},
-                        {"text": "Second Law", "rationale": "The second law relates force, mass, and acceleration.", "isCorrect": false},
-                        {"text": "Third Law", "rationale": "Newton's third law states that forces always occur in equal and opposite pairs.", "isCorrect": true},
-                        {"text": "Law of Gravity", "rationale": "The law of gravity describes the force of attraction between masses.", "isCorrect": false}
-                    ],
-                    "hint": "Consider the interaction between two objects."
+                    "hint": "Speed is distance divided by time."
                 },
                 {
                     "subtopic": "Energy",
-                    "questionNumber": 3,
-                    "question": "What is the formula for kinetic energy?",
+                    "question": "Which form of energy is stored in a stretched rubber band?",
                     "answerOptions": [
-                        {"text": "$$E_p = mgh$$", "rationale": "This is the formula for gravitational potential energy.", "isCorrect": false},
-                        {"text": "$$E_k = \\frac{1}{2}mv^2$$", "rationale": "The formula for kinetic energy is one-half times mass times velocity squared.", "isCorrect": true},
-                        {"text": "$$P = W/t$$", "rationale": "This is the formula for power.", "isCorrect": false},
-                        {"text": "$$F = ma$$", "rationale": "This is the formula for Newton's second law of motion.", "isCorrect": false}
+                        {"text": "Kinetic energy", "rationale": "Kinetic energy is the energy of motion.", "isCorrect": false},
+                        {"text": "Thermal energy", "rationale": "Thermal energy is related to heat.", "isCorrect": false},
+                        {"text": "Potential energy", "rationale": "A stretched rubber band has potential energy, specifically elastic potential energy.", "isCorrect": true},
+                        {"text": "Chemical energy", "rationale": "Chemical energy is stored in the bonds of atoms and molecules.", "isCorrect": false}
                     ],
-                    "hint": "This energy is related to an object's motion and its mass."
+                    "hint": "This type of energy is stored and ready to be released."
                 },
                 {
-                    "subtopic": "Heat Transfer",
-                    "questionNumber": 4,
-                    "question": "Which type of heat transfer occurs through direct contact?",
+                    "subtopic": "Waves",
+                    "question": "What is the term for the height of a wave from its resting position?",
                     "answerOptions": [
-                        {"text": "Conduction", "rationale": "Conduction is the transfer of heat through direct contact between particles of matter.", "isCorrect": true},
-                        {"text": "Convection", "rationale": "Convection is heat transfer through the movement of fluids (liquids or gases).", "isCorrect": false},
-                        {"text": "Radiation", "rationale": "Radiation is the transfer of heat through electromagnetic waves.", "isCorrect": false},
-                        {"text": "Insulation", "rationale": "Insulation is a material that reduces heat transfer.", "isCorrect": false}
+                        {"text": "Frequency", "rationale": "Frequency is the number of waves that pass a point per second.", "isCorrect": false},
+                        {"text": "Wavelength", "rationale": "Wavelength is the distance between two consecutive peaks or troughs.", "isCorrect": false},
+                        {"text": "Amplitude", "rationale": "Amplitude is the maximum displacement or distance moved by a point on a vibrating body or wave measured from its equilibrium position.", "isCorrect": true},
+                        {"text": "Speed", "rationale": "Wave speed is how fast the wave travels.", "isCorrect": false}
                     ],
-                    "hint": "Think about touching a hot pan with your hand."
+                    "hint": "Think of how loud a sound wave is, or how tall an ocean wave is."
+                },
+                {
+                    "subtopic": "Electricity",
+                    "question": "Which material is a good electrical conductor?",
+                    "answerOptions": [
+                        {"text": "Rubber", "rationale": "Rubber is an electrical insulator.", "isCorrect": false},
+                        {"text": "Glass", "rationale": "Glass is an electrical insulator.", "isCorrect": false},
+                        {"text": "Wood", "rationale": "Wood is an electrical insulator.", "isCorrect": false},
+                        {"text": "Copper", "rationale": "Copper is a common material used in electrical wires because it is a very good conductor.", "isCorrect": true}
+                    ],
+                    "hint": "This is a type of metal often found in wires."
                 },
                 {
                     "subtopic": "Light",
-                    "questionNumber": 5,
-                    "question": "What is the speed of light in a vacuum?",
+                    "question": "When light passes from air into water, it bends. What is this phenomenon called?",
                     "answerOptions": [
-                        {"text": "$$3.0 \\times 10^5 m/s$$", "rationale": "This value is incorrect.", "isCorrect": false},
-                        {"text": "$$3.0 \\times 10^8 m/s$$", "rationale": "The speed of light in a vacuum is approximately 299,792,458 meters per second, which is commonly rounded to $$3.0 \\times 10^8 m/s$$.", "isCorrect": true},
-                        {"text": "$$1.5 \\times 10^8 m/s$$", "rationale": "This value is incorrect.", "isCorrect": false},
-                        {"text": "$$6.0 \\times 10^8 m/s$$", "rationale": "This value is incorrect.", "isCorrect": false}
+                        {"text": "Reflection", "rationale": "Reflection is when light bounces off a surface.", "isCorrect": false},
+                        {"text": "Refraction", "rationale": "Refraction is the bending of light as it passes from one medium to another.", "isCorrect": true},
+                        {"text": "Dispersion", "rationale": "Dispersion is the separation of light into its different colors.", "isCorrect": false},
+                        {"text": "Diffraction", "rationale": "Diffraction is the spreading of light as it passes through an opening or around an obstacle.", "isCorrect": false}
                     ],
-                    "hint": "It is represented by the letter 'c' in equations like $$E = mc^2$."
+                    "hint": "This is why a pencil in a glass of water looks broken."
                 },
                 {
-                    "subtopic": "Electricity",
-                    "questionNumber": 6,
-                    "question": "What is the SI unit of electric current?",
+                    "subtopic": "Force",
+                    "question": "What is the force that opposes motion between two surfaces in contact?",
                     "answerOptions": [
-                        {"text": "Volt", "rationale": "Volt is the SI unit of electric potential.", "isCorrect": false},
-                        {"text": "Ohm", "rationale": "Ohm is the SI unit of electrical resistance.", "isCorrect": false},
-                        {"text": "Ampere", "rationale": "The Ampere is the SI unit of electric current, named after André-Marie Ampère.", "isCorrect": true},
-                        {"text": "Coulomb", "rationale": "Coulomb is the SI unit of electric charge.", "isCorrect": false}
+                        {"text": "Gravity", "rationale": "Gravity is the force of attraction between masses.", "isCorrect": false},
+                        {"text": "Magnetism", "rationale": "Magnetism is a force exerted by magnets or moving electric charges.", "isCorrect": false},
+                        {"text": "Friction", "rationale": "Friction is the force that resists motion when two surfaces are in contact.", "isCorrect": true},
+                        {"text": "Tension", "rationale": "Tension is the pulling force exerted by a string, cable, or chain.", "isCorrect": false}
                     ],
-                    "hint": "This unit is often abbreviated as 'A'."
+                    "hint": "This is the force that makes it hard to slide a heavy box across the floor."
                 },
                 {
-                    "subtopic": "Force & Motion",
-                    "questionNumber": 7,
-                    "question": "The tendency of an object to resist a change in its state of motion is known as:",
+                    "subtopic": "Thermodynamics",
+                    "question": "What is the process of a liquid turning into a solid?",
                     "answerOptions": [
-                        {"text": "Momentum", "rationale": "Momentum is the product of an object's mass and velocity.", "isCorrect": false},
-                        {"text": "Force", "rationale": "Force is a push or a pull.", "isCorrect": false},
-                        {"text": "Inertia", "rationale": "Inertia is the property of an object to resist changes in its state of motion.", "isCorrect": true},
-                        {"text": "Acceleration", "rationale": "Acceleration is the rate of change of velocity.", "isCorrect": false}
+                        {"text": "Melting", "rationale": "Melting is the process of a solid becoming a liquid.", "isCorrect": false},
+                        {"text": "Boiling", "rationale": "Boiling is the process of a liquid becoming a gas at a specific temperature.", "isCorrect": false},
+                        {"text": "Freezing", "rationale": "Freezing is the process of a liquid becoming a solid, which is the opposite of melting.", "isCorrect": true},
+                        {"text": "Condensation", "rationale": "Condensation is the process of a gas becoming a liquid.", "isCorrect": false}
                     ],
-                    "hint": "This concept is described by Newton's first law."
+                    "hint": "Think of what happens to water when it gets very cold."
+                },
+                {
+                    "subtopic": "Sound",
+                    "question": "How is the pitch of a sound determined?",
+                    "answerOptions": [
+                        {"text": "By its amplitude.", "rationale": "The amplitude of a sound wave determines its loudness.", "isCorrect": false},
+                        {"text": "By its wavelength.", "isCorrect": false},
+                        {"text": "By its speed.", "rationale": "The speed of sound is constant in a given medium.", "isCorrect": false},
+                        {"text": "By its frequency.", "rationale": "The pitch of a sound is determined by the frequency of the sound wave. Higher frequency means higher pitch.", "isCorrect": true}
+                    ],
+                    "hint": "This is related to how many waves pass a point in a second."
+                },
+                {
+                    "subtopic": "Magnetism",
+                    "question": "Which of these materials is magnetic?",
+                    "answerOptions": [
+                        {"text": "Aluminum", "rationale": "Aluminum is not a magnetic material.", "isCorrect": false},
+                        {"text": "Plastic", "rationale": "Plastic is not magnetic.", "isCorrect": false},
+                        {"text": "Iron", "rationale": "Iron, cobalt, and nickel are common magnetic materials.", "isCorrect": true},
+                        {"text": "Glass", "rationale": "Glass is not magnetic.", "isCorrect": false}
+                    ],
+                    "hint": "This is a common metal used in many tools."
+                },
+                {
+                    "subtopic": "Motion",
+                    "question": "What is acceleration?",
+                    "answerOptions": [
+                        {"text": "The rate of change of speed.", "isCorrect": false},
+                        {"text": "The total distance an object travels.", "rationale": "This is distance.", "isCorrect": false},
+                        {"text": "The rate of change of velocity.", "rationale": "Acceleration is a vector quantity defined as the rate at which an object changes its velocity.", "isCorrect": true},
+                        {"text": "The total time it takes for an object to travel.", "rationale": "This is time.", "isCorrect": false}
+                    ],
+                    "hint": "This is what happens when a car speeds up or slows down."
                 },
                 {
                     "subtopic": "Energy",
-                    "questionNumber": 8,
-                    "question": "What is the unit of work in physics?",
+                    "question": "What type of energy is possessed by a moving object?",
                     "answerOptions": [
-                        {"text": "Watt", "rationale": "Watt is the unit of power, which is the rate of doing work.", "isCorrect": false},
-                        {"text": "Joule", "rationale": "Joule is the SI unit of work and energy. It is defined as one Newton-meter.", "isCorrect": true},
-                        {"text": "Newton", "rationale": "Newton is the unit of force, not work.", "isCorrect": false},
-                        {"text": "Calorie", "rationale": "Calorie is a unit of energy, but Joule is the standard SI unit.", "isCorrect": false}
+                        {"text": "Potential energy", "rationale": "Potential energy is stored energy.", "isCorrect": false},
+                        {"text": "Kinetic energy", "rationale": "Kinetic energy is the energy of motion.", "isCorrect": true},
+                        {"text": "Thermal energy", "rationale": "Thermal energy is related to heat.", "isCorrect": false},
+                        {"text": "Chemical energy", "rationale": "Chemical energy is stored in bonds.", "isCorrect": false}
                     ],
-                    "hint": "The unit is also used for energy."
-                },
-                {
-                    "subtopic": "Vectors & Scalars",
-                    "questionNumber": 9,
-                    "question": "Which of the following is an example of a scalar quantity?",
-                    "answerOptions": [
-                        {"text": "Velocity", "rationale": "Velocity is a vector quantity, as it has both magnitude and direction.", "isCorrect": false},
-                        {"text": "Displacement", "rationale": "Displacement is a vector quantity, as it measures distance in a specific direction.", "isCorrect": false},
-                        {"text": "Speed", "rationale": "Speed is a scalar quantity, as it only has magnitude and no direction.", "isCorrect": true},
-                        {"text": "Force", "rationale": "Force is a vector quantity, as it has both magnitude and direction.", "isCorrect": false}
-                    ],
-                    "hint": "Scalar quantities only have magnitude."
-                },
-                {
-                    "subtopic": "Electricity",
-                    "questionNumber": 10,
-                    "question": "What is the relationship between power, voltage, and current in an electrical circuit?",
-                    "answerOptions": [
-                        {"text": "$$P = V \\times I$$", "rationale": "Power is equal to voltage multiplied by current. This is a fundamental formula in electrical circuits.", "isCorrect": true},
-                        {"text": "$$V = I \\times R$$", "rationale": "This is Ohm's Law, which relates voltage, current, and resistance.", "isCorrect": false},
-                        {"text": "$$I = P \\times V$$", "rationale": "This formula is incorrect.", "isCorrect": false},
-                        {"text": "$$P = R \\times I^2$$", "rationale": "This formula is correct but incomplete as it does not include voltage.", "isCorrect": false}
-                    ],
-                    "hint": "The unit of power is the Watt, the unit of voltage is the Volt, and the unit of current is the Ampere."
+                    "hint": "It comes from the Greek word for 'motion'."
                 }
             ],
             "Chemistry": [
                 {
-                    "subtopic": "Periodic Table",
-                    "questionNumber": 1,
-                    "question": "What is the chemical symbol for gold?",
+                    "subtopic": "Elements",
+                    "question": "What is the most common element in the universe?",
                     "answerOptions": [
-                        {"text": "Ag", "rationale": "Ag is the chemical symbol for silver.", "isCorrect": false},
-                        {"text": "Au", "rationale": "Au is the chemical symbol for gold, from the Latin word 'aurum'.", "isCorrect": true},
-                        {"text": "Fe", "rationale": "Fe is the chemical symbol for iron.", "isCorrect": false},
-                        {"text": "Pb", "rationale": "Pb is the chemical symbol for lead.", "isCorrect": false}
+                        {"text": "Oxygen", "rationale": "Oxygen is the most common element in Earth's crust, but not the universe.", "isCorrect": false},
+                        {"text": "Helium", "rationale": "Helium is the second most common element.", "isCorrect": false},
+                        {"text": "Carbon", "rationale": "Carbon is a key component of life, but not the most abundant element overall.", "isCorrect": false},
+                        {"text": "Hydrogen", "rationale": "Hydrogen is the most common element, making up over 75% of the universe's mass.", "isCorrect": true}
                     ],
-                    "hint": "The symbol comes from its Latin name, 'aurum'."
+                    "hint": "It is the lightest element on the periodic table."
+                },
+                {
+                    "subtopic": "Compounds",
+                    "question": "What is the chemical formula for water?",
+                    "answerOptions": [
+                        {"text": "CO2", "rationale": "This is carbon dioxide.", "isCorrect": false},
+                        {"text": "H2O", "rationale": "Water is a compound made of two hydrogen atoms and one oxygen atom.", "isCorrect": true},
+                        {"text": "NaCl", "rationale": "This is table salt.", "isCorrect": false},
+                        {"text": "O2", "rationale": "This is oxygen gas.", "isCorrect": false}
+                    ],
+                    "hint": "It contains hydrogen and oxygen."
+                },
+                {
+                    "subtopic": "Reactions",
+                    "question": "What happens in a chemical reaction?",
+                    "answerOptions": [
+                        {"text": "Elements are destroyed and created.", "rationale": "Elements are neither destroyed nor created in a chemical reaction; they are rearranged.", "isCorrect": false},
+                        {"text": "Atoms are rearranged to form new substances.", "rationale": "A chemical reaction involves the breaking of chemical bonds and the formation of new ones, rearranging atoms into new substances.", "isCorrect": true},
+                        {"text": "The mass of the substances changes.", "rationale": "The law of conservation of mass states that mass is conserved in a chemical reaction.", "isCorrect": false},
+                        {"text": "Substances change their physical state but not their composition.", "rationale": "This describes a physical change, not a chemical reaction.", "isCorrect": false}
+                    ],
+                    "hint": "A chemical reaction is a process that leads to the chemical transformation of one set of chemical substances to another."
+                },
+                {
+                    "subtopic": "Solutions",
+                    "question": "What is a substance that dissolves another substance to form a solution?",
+                    "answerOptions": [
+                        {"text": "Solute", "rationale": "The solute is the substance that is dissolved.", "isCorrect": false},
+                        {"text": "Mixture", "rationale": "A mixture is a combination of two or more substances that are not chemically bonded.", "isCorrect": false},
+                        {"text": "Solvent", "rationale": "A solvent is a substance that dissolves a solute to form a solution.", "isCorrect": true},
+                        {"text": "Precipitate", "rationale": "A precipitate is a solid that forms from a solution during a chemical reaction.", "isCorrect": false}
+                    ],
+                    "hint": "Water is a universal example of this substance."
                 },
                 {
                     "subtopic": "Acids & Bases",
-                    "questionNumber": 2,
-                    "question": "What is the pH of a neutral solution?",
+                    "question": "What does a substance with a pH of 2 indicate?",
                     "answerOptions": [
-                        {"text": "0", "rationale": "A pH of 0 indicates a very strong acid.", "isCorrect": false},
-                        {"text": "7", "rationale": "A pH of 7 is considered neutral, such as pure water.", "isCorrect": true},
-                        {"text": "14", "rationale": "A pH of 14 indicates a very strong base.", "isCorrect": false},
-                        {"text": "1", "rationale": "A pH of 1 indicates a strong acid.", "isCorrect": false}
+                        {"text": "It is a weak base.", "rationale": "A pH below 7 is acidic.", "isCorrect": false},
+                        {"text": "It is a strong acid.", "rationale": "A low pH number (below 7) indicates an acidic substance, with a pH of 2 being a strong acid.", "isCorrect": true},
+                        {"text": "It is neutral.", "rationale": "A neutral substance has a pH of 7.", "isCorrect": false},
+                        {"text": "It is a strong base.", "rationale": "A strong base has a high pH number, close to 14.", "isCorrect": false}
                     ],
-                    "hint": "Pure water has this pH value at standard temperature."
-                },
-                {
-                    "subtopic": "Atmosphere",
-                    "questionNumber": 3,
-                    "question": "What is the most abundant gas in Earth's atmosphere?",
-                    "answerOptions": [
-                        {"text": "Oxygen", "rationale": "Oxygen makes up about 21% of the atmosphere.", "isCorrect": false},
-                        {"text": "Carbon dioxide", "rationale": "Carbon dioxide makes up a very small percentage of the atmosphere.", "isCorrect": false},
-                        {"text": "Argon", "rationale": "Argon is a noble gas that makes up less than 1% of the atmosphere.", "isCorrect": false},
-                        {"text": "Nitrogen", "rationale": "Nitrogen gas ($$N_2$$) makes up approximately 78% of Earth's atmosphere.", "isCorrect": true}
-                    ],
-                    "hint": "This element is a major component of air and is found in most living things."
-                },
-                {
-                    "subtopic": "States of Matter",
-                    "questionNumber": 4,
-                    "question": "What is the name of the process by which a solid turns directly into a gas?",
-                    "answerOptions": [
-                        {"text": "Melting", "rationale": "Melting is the process of a solid changing to a liquid.", "isCorrect": false},
-                        {"text": "Sublimation", "rationale": "Sublimation is the transition of a substance directly from the solid to the gas state.", "isCorrect": true},
-                        {"text": "Evaporation", "rationale": "Evaporation is the process of a liquid changing to a gas.", "isCorrect": false},
-                        {"text": "Condensation", "rationale": "Condensation is the process of a gas changing to a liquid.", "isCorrect": false}
-                    ],
-                    "hint": "Dry ice is a common example of a substance that undergoes this process."
+                    "hint": "The pH scale ranges from 0 to 14, with 7 being neutral."
                 },
                 {
                     "subtopic": "Periodic Table",
-                    "questionNumber": 5,
                     "question": "Which of the following is a noble gas?",
                     "answerOptions": [
                         {"text": "Chlorine", "rationale": "Chlorine is a halogen.", "isCorrect": false},
@@ -389,287 +376,274 @@
                 },
                 {
                     "subtopic": "Atomic Structure",
-                    "questionNumber": 6,
-                    "question": "What is the charge of a neutron?",
+                    "question": "What is the charge of an electron?",
                     "answerOptions": [
                         {"text": "Positive", "rationale": "Protons have a positive charge.", "isCorrect": false},
-                        {"text": "Negative", "rationale": "Electrons have a negative charge.", "isCorrect": false},
-                        {"text": "Neutral", "rationale": "Neutrons have no charge and are therefore neutral.", "isCorrect": true},
-                        {"text": "Variable", "rationale": "The charge is not variable; it is always zero.", "isCorrect": false}
+                        {"text": "Negative", "rationale": "Electrons have a negative charge.", "isCorrect": true},
+                        {"text": "Neutral", "rationale": "Neutrons have no charge.", "isCorrect": false},
+                        {"text": "Variable", "rationale": "The charge of an electron is constant.", "isCorrect": false}
                     ],
-                    "hint": "The name of this subatomic particle provides a clue about its charge."
+                    "hint": "The name of this particle is related to electricity."
                 },
                 {
                     "subtopic": "Chemical Bonds",
-                    "questionNumber": 7,
-                    "question": "Which bond involves the sharing of electrons between atoms?",
+                    "question": "What type of bond is formed when atoms share electrons?",
                     "answerOptions": [
-                        {"text": "Ionic bond", "rationale": "An ionic bond involves the transfer of electrons from one atom to another.", "isCorrect": false},
-                        {"text": "Metallic bond", "rationale": "A metallic bond involves a sea of delocalized electrons shared among metal atoms.", "isCorrect": false},
-                        {"text": "Covalent bond", "rationale": "A covalent bond is a chemical bond that involves the sharing of electron pairs between atoms.", "isCorrect": true},
-                        {"text": "Hydrogen bond", "rationale": "A hydrogen bond is a weak attraction between a hydrogen atom and an electronegative atom.", "isCorrect": false}
+                        {"text": "Ionic bond", "rationale": "An ionic bond involves the transfer of electrons.", "isCorrect": false},
+                        {"text": "Covalent bond", "rationale": "A covalent bond is formed by the sharing of electrons between atoms.", "isCorrect": true},
+                        {"text": "Metallic bond", "rationale": "A metallic bond involves a sea of delocalized electrons.", "isCorrect": false},
+                        {"text": "Hydrogen bond", "rationale": "A hydrogen bond is a type of intermolecular force.", "isCorrect": false}
                     ],
-                    "hint": "Think about how water molecules are formed."
+                    "hint": "The prefix for this type of bond means 'together' or 'jointly'."
                 },
                 {
-                    "subtopic": "Compounds",
-                    "questionNumber": 8,
-                    "question": "What is the common name for the compound $$NaCl$$?",
+                    "subtopic": "States of Matter",
+                    "question": "What is the process of a liquid turning into a gas called?",
                     "answerOptions": [
-                        {"text": "Baking soda", "rationale": "Baking soda is sodium bicarbonate ($$NaHCO_3$$).", "isCorrect": false},
-                        {"text": "Table salt", "rationale": "The compound $$NaCl$$ is sodium chloride, commonly known as table salt.", "isCorrect": true},
-                        {"text": "Ammonia", "rationale": "Ammonia is $$NH_3$$.", "isCorrect": false},
-                        {"text": "Water", "rationale": "Water is $$H_2O$$.", "isCorrect": false}
+                        {"text": "Condensation", "rationale": "Condensation is a gas becoming a liquid.", "isCorrect": false},
+                        {"text": "Sublimation", "rationale": "Sublimation is a solid becoming a gas.", "isCorrect": false},
+                        {"text": "Melting", "rationale": "Melting is a solid becoming a liquid.", "isCorrect": false},
+                        {"text": "Evaporation", "rationale": "Evaporation is the process of a liquid changing to a gas.", "isCorrect": true}
                     ],
-                    "hint": "This is a common seasoning used in cooking."
+                    "hint": "This is how puddles disappear on a hot day."
                 },
                 {
-                    "subtopic": "Periodic Table",
-                    "questionNumber": 9,
-                    "question": "In the periodic table, what is the name for a horizontal row?",
+                    "subtopic": "Mixtures",
+                    "question": "A substance that has a uniform composition throughout is a:",
                     "answerOptions": [
-                        {"text": "Group", "rationale": "A group is a vertical column in the periodic table.", "isCorrect": false},
-                        {"text": "Family", "rationale": "A family is another name for a group.", "isCorrect": false},
-                        {"text": "Period", "rationale": "A period is a horizontal row in the periodic table.", "isCorrect": true},
-                        {"text": "Block", "rationale": "A block refers to a section of the periodic table.", "isCorrect": false}
+                        {"text": "Heterogeneous mixture", "rationale": "A heterogeneous mixture does not have a uniform composition.", "isCorrect": false},
+                        {"text": "Homogeneous mixture", "rationale": "A homogeneous mixture has a uniform composition, also known as a solution.", "isCorrect": true},
+                        {"text": "Element", "rationale": "An element is a pure substance, not a mixture.", "isCorrect": false},
+                        {"text": "Compound", "rationale": "A compound is a pure substance made of two or more elements.", "isCorrect": false}
                     ],
-                    "hint": "Elements in the same horizontal row have the same number of electron shells."
+                    "hint": "Think of salt water. The salt is evenly spread throughout the water."
                 },
                 {
-                    "subtopic": "Compounds",
-                    "questionNumber": 10,
-                    "question": "What is the chemical formula for carbon dioxide?",
+                    "subtopic": "Stoichiometry",
+                    "question": "What is the mole?",
                     "answerOptions": [
-                        {"text": "$$CO$$", "rationale": "This is the formula for carbon monoxide.", "isCorrect": false},
-                        {"text": "CO2", "rationale": "Carbon dioxide is a compound with one carbon atom and two oxygen atoms.", "isCorrect": true},
-                        {"text": "C2O", "rationale": "This formula is incorrect.", "isCorrect": false},
-                        {"text": "C2O2", "rationale": "This formula is incorrect.", "isCorrect": false}
+                        {"text": "A small mammal that lives underground.", "isCorrect": false},
+                        {"text": "A unit of length.", "isCorrect": false},
+                        {"text": "A unit of mass.", "isCorrect": false},
+                        {"text": "A unit of measurement for the amount of a substance.", "rationale": "The mole is the SI unit for the amount of a substance, defined as containing exactly 6.02214076 x 10^23 elementary entities.", "isCorrect": true}
                     ],
-                    "hint": "The 'di-' prefix in the name indicates the number of oxygen atoms."
+                    "hint": "This unit is often used in chemistry to count atoms or molecules."
                 }
             ],
             "Biology": [
                 {
-                    "subtopic": "Cell Biology",
-                    "questionNumber": 1,
-                    "question": "What is the powerhouse of the cell?",
+                    "subtopic": "Cells",
+                    "question": "What is the main function of a cell membrane?",
                     "answerOptions": [
-                        {"text": "Nucleus", "rationale": "The nucleus contains the cell's genetic material and controls cell activities.", "isCorrect": false},
-                        {"text": "Mitochondria", "rationale": "Mitochondria are often referred to as the powerhouse of the cell because they generate most of the cell's supply of ATP.", "isCorrect": true},
-                        {"text": "Ribosome", "rationale": "Ribosomes are responsible for protein synthesis.", "isCorrect": false},
-                        {"text": "Vacuole", "rationale": "A vacuole is a storage sac.", "isCorrect": false}
+                        {"text": "To produce energy.", "rationale": "Mitochondria produce energy.", "isCorrect": false},
+                        {"text": "To control what enters and leaves the cell.", "rationale": "The cell membrane acts as a barrier, controlling the movement of substances in and out of the cell.", "isCorrect": true},
+                        {"text": "To store genetic information.", "rationale": "The nucleus stores genetic information.", "isCorrect": false},
+                        {"text": "To carry out photosynthesis.", "rationale": "Chloroplasts carry out photosynthesis in plant cells.", "isCorrect": false}
                     ],
-                    "hint": "This organelle is responsible for cellular respiration."
+                    "hint": "It acts like a gatekeeper for the cell."
                 },
                 {
                     "subtopic": "Genetics",
-                    "questionNumber": 2,
-                    "question": "Which molecule carries genetic instructions for the development, functioning, growth, and reproduction of all known organisms and many viruses?",
+                    "question": "What is the study of heredity and the variation of inherited characteristics?",
                     "answerOptions": [
-                        {"text": "RNA", "rationale": "RNA is involved in protein synthesis and genetic expression but is not the primary carrier of genetic instructions for all organisms.", "isCorrect": false},
-                        {"text": "DNA", "rationale": "Deoxyribonucleic acid (DNA) is the molecule that contains the genetic code of organisms.", "isCorrect": true},
-                        {"text": "Protein", "rationale": "Proteins are large biomolecules, but they do not carry the genetic instructions.", "isCorrect": false},
-                        {"text": "Lipid", "rationale": "Lipids are a class of organic compounds that include fats, oils, and waxes.", "isCorrect": false}
+                        {"text": "Ecology", "rationale": "Ecology is the study of organisms and their environment.", "isCorrect": false},
+                        {"text": "Anatomy", "rationale": "Anatomy is the study of the structure of living things.", "isCorrect": false},
+                        {"text": "Genetics", "rationale": "Genetics is the scientific study of genes and heredity.", "isCorrect": true},
+                        {"text": "Physiology", "rationale": "Physiology is the study of the function of living organisms.", "isCorrect": false}
                     ],
-                    "hint": "This molecule's full name is Deoxyribonucleic acid."
-                },
-                {
-                    "subtopic": "Botany",
-                    "questionNumber": 3,
-                    "question": "What is the process by which plants use sunlight, water, and carbon dioxide to create their own food?",
-                    "answerOptions": [
-                        {"text": "Respiration", "rationale": "Respiration is the process of breaking down food to release energy.", "isCorrect": false},
-                        {"text": "Transpiration", "rationale": "Transpiration is the process of water movement through a plant and its evaporation from aerial parts.", "isCorrect": false},
-                        {"text": "Photosynthesis", "rationale": "Photosynthesis is the process that converts light energy into chemical energy to create food.", "isCorrect": true},
-                        {"text": "Fermentation", "rationale": "Fermentation is a metabolic process that produces chemical changes in organic substrates through the action of enzymes.", "isCorrect": false}
-                    ],
-                    "hint": "This process is where plants 'make' their own food."
-                },
-                {
-                    "subtopic": "Human Anatomy",
-                    "questionNumber": 4,
-                    "question": "What part of the blood is responsible for carrying oxygen?",
-                    "answerOptions": [
-                        {"text": "White blood cells", "rationale": "White blood cells are part of the immune system and fight infection.", "isCorrect": false},
-                        {"text": "Platelets", "rationale": "Platelets are responsible for blood clotting.", "isCorrect": false},
-                        {"text": "Red blood cells", "rationale": "Red blood cells contain hemoglobin, which binds to oxygen and transports it throughout the body.", "isCorrect": true},
-                        {"text": "Plasma", "rationale": "Plasma is the liquid component of blood that holds the cells in suspension.", "isCorrect": false}
-                    ],
-                    "hint": "This component of blood gives it its color."
-                },
-                {
-                    "subtopic": "Human Anatomy",
-                    "questionNumber": 5,
-                    "question": "What is the primary function of the large intestine?",
-                    "answerOptions": [
-                        {"text": "Digesting food", "rationale": "Most digestion occurs in the stomach and small intestine.", "isCorrect": false},
-                        {"text": "Absorbing water and electrolytes", "rationale": "The large intestine's primary function is to absorb water and electrolytes from indigestible food matter.", "isCorrect": true},
-                        {"text": "Producing insulin", "rationale": "Insulin is produced by the pancreas.", "isCorrect": false},
-                        {"text": "Filtering blood", "rationale": "The kidneys and liver are responsible for filtering blood.", "isCorrect": false}
-                    ],
-                    "hint": "This organ's main job is to remove water from waste."
+                    "hint": "This field of study is named after a unit of heredity."
                 },
                 {
                     "subtopic": "Ecology",
-                    "questionNumber": 6,
-                    "question": "What is the term for a group of organisms of the same species living in a particular area?",
+                    "question": "Which of the following describes an ecosystem?",
                     "answerOptions": [
-                        {"text": "Community", "rationale": "A community is a group of different species living and interacting in a particular area.", "isCorrect": false},
-                        {"text": "Ecosystem", "rationale": "An ecosystem includes all the living organisms in an area, as well as the non-living parts of the environment.", "isCorrect": false},
-                        {"text": "Population", "rationale": "A population is defined as a group of individuals of the same species living in a specific geographical area.", "isCorrect": true},
-                        {"text": "Biome", "rationale": "A biome is a large area of the planet classified by its climate and the plants and animals that live there.", "isCorrect": false}
+                        {"text": "A group of individuals of the same species.", "rationale": "This is a population.", "isCorrect": false},
+                        {"text": "All the living organisms in a particular area.", "rationale": "This is a community.", "isCorrect": false},
+                        {"text": "A community of living organisms interacting with their non-living environment.", "rationale": "An ecosystem includes both biotic (living) and abiotic (non-living) components.", "isCorrect": true},
+                        {"text": "A large-scale habitat type.", "rationale": "This is a biome.", "isCorrect": false}
                     ],
-                    "hint": "This term is used to describe a single species in a specific location."
+                    "hint": "It includes both living things and their non-living surroundings."
                 },
                 {
-                    "subtopic": "Zoology",
-                    "questionNumber": 7,
-                    "question": "Which of the following is an example of an invertebrate?",
+                    "subtopic": "Human Body",
+                    "question": "What is the function of the human skeletal system?",
                     "answerOptions": [
-                        {"text": "Frog", "rationale": "Frogs are vertebrates as they have a backbone.", "isCorrect": false},
-                        {"text": "Fish", "rationale": "Fish are vertebrates as they have a backbone.", "isCorrect": false},
-                        {"text": "Spider", "rationale": "Spiders are invertebrates as they lack a backbone.", "isCorrect": true},
-                        {"text": "Bird", "rationale": "Birds are vertebrates as they have a backbone.", "isCorrect": false}
+                        {"text": "Pumping blood.", "rationale": "The heart pumps blood.", "isCorrect": false},
+                        {"text": "Producing hormones.", "rationale": "Endocrine glands produce hormones.", "isCorrect": false},
+                        {"text": "Providing support and protection for organs.", "rationale": "The skeleton provides the framework for the body and protects internal organs.", "isCorrect": true},
+                        {"text": "Digesting food.", "rationale": "The digestive system digests food.", "isCorrect": false}
                     ],
-                    "hint": "Invertebrates are animals that do not have a backbone."
+                    "hint": "This system is made of bones and gives your body its shape."
                 },
                 {
-                    "subtopic": "Human Anatomy",
-                    "questionNumber": 8,
-                    "question": "Which organ is responsible for pumping blood throughout the body?",
+                    "subtopic": "Plants",
+                    "question": "In which part of a plant does photosynthesis mainly occur?",
                     "answerOptions": [
-                        {"text": "Lungs", "rationale": "The lungs are responsible for gas exchange, taking in oxygen and releasing carbon dioxide.", "isCorrect": false},
-                        {"text": "Stomach", "rationale": "The stomach is responsible for breaking down food.", "isCorrect": false},
-                        {"text": "Heart", "rationale": "The heart is a muscular organ that pumps blood through the circulatory system.", "isCorrect": true},
-                        {"text": "Liver", "rationale": "The liver is a key organ for detoxification and metabolism.", "isCorrect": false}
+                        {"text": "Roots", "rationale": "Roots absorb water and nutrients.", "isCorrect": false},
+                        {"text": "Flowers", "rationale": "Flowers are for reproduction.", "isCorrect": false},
+                        {"text": "Stems", "rationale": "Stems support the plant and transport water.", "isCorrect": false},
+                        {"text": "Leaves", "rationale": "Leaves are the primary site for photosynthesis, as they contain chloroplasts.", "isCorrect": true}
                     ],
-                    "hint": "This organ beats around 60 to 100 times per minute in a resting adult."
+                    "hint": "This part of the plant is usually green."
+                },
+                {
+                    "subtopic": "Human Body",
+                    "question": "What is the largest organ in the human body?",
+                    "answerOptions": [
+                        {"text": "Liver", "rationale": "The liver is a very large internal organ, but not the largest overall.", "isCorrect": false},
+                        {"text": "Brain", "rationale": "The brain is a vital organ, but much smaller than the skin.", "isCorrect": false},
+                        {"text": "Skin", "rationale": "The skin is the largest external organ of the human body, covering an area of approximately 20 square feet.", "isCorrect": true},
+                        {"text": "Heart", "rationale": "The heart is a vital organ, but not the largest.", "isCorrect": false}
+                    ],
+                    "hint": "This organ covers the entire outside of your body."
+                },
+                {
+                    "subtopic": "Cells",
+                    "question": "Which type of cell does not have a nucleus?",
+                    "answerOptions": [
+                        {"text": "Plant cell", "rationale": "Plant cells have a nucleus.", "isCorrect": false},
+                        {"text": "Animal cell", "rationale": "Animal cells have a nucleus.", "isCorrect": false},
+                        {"text": "Prokaryotic cell", "rationale": "Prokaryotic cells, such as bacteria and archaea, lack a nucleus and other membrane-bound organelles.", "isCorrect": true},
+                        {"text": "Eukaryotic cell", "rationale": "Eukaryotic cells have a nucleus.", "isCorrect": false}
+                    ],
+                    "hint": "This is a simple type of cell, like bacteria."
+                },
+                {
+                    "subtopic": "Ecology",
+                    "question": "A producer is an organism that:",
+                    "answerOptions": [
+                        {"text": "Consumes other organisms for food.", "rationale": "This describes a consumer.", "isCorrect": false},
+                        {"text": "Breaks down dead organic matter.", "rationale": "This describes a decomposer.", "isCorrect": false},
+                        {"text": "Creates its own food, usually through photosynthesis.", "rationale": "Producers, or autotrophs, create their own food from inorganic sources, typically using sunlight.", "isCorrect": true},
+                        {"text": "Moves from one habitat to another.", "rationale": "This describes a migratory organism.", "isCorrect": false}
+                    ],
+                    "hint": "Think of the first step in a food chain."
                 },
                 {
                     "subtopic": "Genetics",
-                    "questionNumber": 9,
-                    "question": "What is the unit of heredity that is transferred from a parent to offspring?",
+                    "question": "What are the building blocks of proteins?",
                     "answerOptions": [
-                        {"text": "Cell", "rationale": "A cell is the basic unit of life.", "isCorrect": false},
-                        {"text": "Gene", "rationale": "A gene is a segment of DNA that codes for a specific trait and is passed from parent to offspring.", "isCorrect": true},
-                        {"text": "Protein", "rationale": "A protein is a molecule made from a gene, but it is not the unit of heredity itself.", "isCorrect": false},
-                        {"text": "Chromosome", "rationale": "A chromosome is a structure made of DNA and proteins, containing many genes.", "isCorrect": false}
+                        {"text": "Carbohydrates", "rationale": "Carbohydrates are a source of energy.", "isCorrect": false},
+                        {"text": "Amino acids", "rationale": "Amino acids are the monomers that polymerize to form proteins.", "isCorrect": true},
+                        {"text": "Lipids", "rationale": "Lipids are fats and oils.", "isCorrect": false},
+                        {"text": "Nucleic acids", "rationale": "Nucleic acids store genetic information.", "isCorrect": false}
                     ],
-                    "hint": "This term is what Gregor Mendel studied in his experiments with pea plants."
+                    "hint": "There are 20 common types of these, often called the 'A, C, G' of proteins."
                 },
                 {
-                    "subtopic": "General Biology",
-                    "questionNumber": 10,
-                    "question": "The scientific study of living organisms, including their structure, function, growth, evolution, and distribution, is known as:",
+                    "subtopic": "Plants",
+                    "question": "What is the primary function of a plant's roots?",
                     "answerOptions": [
-                        {"text": "Chemistry", "rationale": "Chemistry is the study of matter and its properties.", "isCorrect": false},
-                        {"text": "Physics", "rationale": "Physics is the study of matter, motion, energy, and force.", "isCorrect": false},
-                        {"text": "Biology", "rationale": "Biology is the natural science that studies life and living organisms.", "isCorrect": true},
-                        {"text": "Geology", "rationale": "Geology is the study of the Earth, its materials, and the processes that shape it.", "isCorrect": false}
+                        {"text": "To produce flowers.", "rationale": "Flowers are for reproduction.", "isCorrect": false},
+                        {"text": "To absorb water and nutrients from the soil.", "rationale": "Roots are the primary site for absorbing water and mineral nutrients from the soil.", "isCorrect": true},
+                        {"text": "To produce food through photosynthesis.", "rationale": "Photosynthesis occurs in the leaves.", "isCorrect": false},
+                        {"text": "To transport water to the leaves.", "rationale": "The stem transports water.", "isCorrect": false}
                     ],
-                    "hint": "The name of this field comes from the Greek words for 'life' and 'study'."
+                    "hint": "This part is underground and helps the plant stay stable."
                 }
             ],
             "History": [
                 {
+                    "subtopic": "Ancient Civilizations",
+                    "question": "Which ancient civilization is famous for its invention of writing, known as cuneiform?",
+                    "answerOptions": [
+                        {"text": "Ancient Egypt", "rationale": "Ancient Egyptians used hieroglyphs.", "isCorrect": false},
+                        {"text": "Ancient Greece", "rationale": "Ancient Greeks developed their own alphabet.", "isCorrect": false},
+                        {"text": "Mesopotamia", "rationale": "Sumerians in Mesopotamia are credited with inventing cuneiform, one of the earliest systems of writing.", "isCorrect": true},
+                        {"text": "Roman Empire", "rationale": "Romans used the Latin alphabet.", "isCorrect": false}
+                    ],
+                    "hint": "This civilization was located between the Tigris and Euphrates rivers."
+                },
+                {
+                    "subtopic": "World War II",
+                    "question": "What event is generally considered the start of World War II in Europe?",
+                    "answerOptions": [
+                        {"text": "The attack on Pearl Harbor", "rationale": "This event brought the United States into the war.", "isCorrect": false},
+                        {"text": "The invasion of Poland by Germany", "rationale": "Germany's invasion of Poland on September 1, 1939, led to Britain and France declaring war, thus starting WWII in Europe.", "isCorrect": true},
+                        {"text": "The signing of the Treaty of Versailles", "rationale": "This treaty ended World War I.", "isCorrect": false},
+                        {"text": "The assassination of Archduke Franz Ferdinand", "rationale": "This event triggered World War I.", "isCorrect": false}
+                    ],
+                    "hint": "This happened in September 1939."
+                },
+                {
+                    "subtopic": "Exploration",
+                    "question": "Which explorer is credited with the first circumnavigation of the Earth?",
+                    "answerOptions": [
+                        {"text": "Christopher Columbus", "rationale": "Columbus reached the Americas but did not circumnavigate the globe.", "isCorrect": false},
+                        {"text": "Vasco da Gama", "rationale": "Da Gama was the first to sail from Europe to India.", "isCorrect": false},
+                        {"text": "Ferdinand Magellan", "rationale": "Ferdinand Magellan's expedition was the first to circumnavigate the Earth, although he did not complete the entire voyage himself.", "isCorrect": true},
+                        {"text": "Marco Polo", "rationale": "Marco Polo was a merchant traveler who explored Asia.", "isCorrect": false}
+                    ],
+                    "hint": "This Portuguese explorer's name is associated with a famous strait."
+                },
+                {
+                    "subtopic": "The Middle Ages",
+                    "question": "What was the system of land ownership and social hierarchy during the Middle Ages called?",
+                    "answerOptions": [
+                        {"text": "Democracy", "rationale": "Democracy is a system of government by the people.", "isCorrect": false},
+                        {"text": "Communism", "rationale": "Communism is a political and economic system.", "isCorrect": false},
+                        {"text": "Feudalism", "rationale": "Feudalism was the dominant social system in medieval Europe, in which nobles held lands from the Crown in exchange for military service.", "isCorrect": true},
+                        {"text": "Capitalism", "rationale": "Capitalism is an economic system based on private ownership.", "isCorrect": false}
+                    ],
+                    "hint": "This system involved lords, vassals, and peasants."
+                },
+                {
+                    "subtopic": "American Revolution",
+                    "question": "Who was the first President of the United States?",
+                    "answerOptions": [
+                        {"text": "Benjamin Franklin", "rationale": "Benjamin Franklin was a Founding Father, but not a president.", "isCorrect": false},
+                        {"text": "Thomas Jefferson", "rationale": "Thomas Jefferson was the third president.", "isCorrect": false},
+                        {"text": "George Washington", "rationale": "George Washington was a key leader in the American Revolution and the first president.", "isCorrect": true},
+                        {"text": "John Adams", "rationale": "John Adams was the second president.", "isCorrect": false}
+                    ],
+                    "hint": "His face is on the one-dollar bill."
+                },
+                {
                     "subtopic": "Ancient Rome",
-                    "questionNumber": 1,
                     "question": "Who was the first emperor of Rome?",
                     "answerOptions": [
-                        {"text": "Julius Caesar", "rationale": "Julius Caesar was a Roman general and statesman, but he was not an emperor.", "isCorrect": false},
+                        {"text": "Julius Caesar", "rationale": "Julius Caesar was a Roman general and statesman, but not an emperor.", "isCorrect": false},
                         {"text": "Augustus", "rationale": "Augustus, born Gaius Octavius, was the first Roman emperor.", "isCorrect": true},
-                        {"text": "Nero", "rationale": "Nero was a later Roman emperor known for his tyrannical rule.", "isCorrect": false},
+                        {"text": "Nero", "rationale": "Nero was a later Roman emperor.", "isCorrect": false},
                         {"text": "Constantine the Great", "rationale": "Constantine was a Roman emperor who ruled much later than Augustus.", "isCorrect": false}
                     ],
                     "hint": "He was the adopted son of Julius Caesar."
                 },
                 {
-                    "subtopic": "Industrial Revolution",
-                    "questionNumber": 2,
-                    "question": "In which country did the Industrial Revolution begin?",
-                    "answerOptions": [
-                        {"text": "Germany", "rationale": "The Industrial Revolution spread to Germany later.", "isCorrect": false},
-                        {"text": "United States", "rationale": "The Industrial Revolution spread to the United States later.", "isCorrect": false},
-                        {"text": "France", "rationale": "The Industrial Revolution spread to France later.", "isCorrect": false},
-                        {"text": "Great Britain", "rationale": "The Industrial Revolution began in Great Britain in the late 18th century.", "isCorrect": true},
-                    ],
-                    "hint": "Think about the country where the steam engine was developed."
-                },
-                {
-                    "subtopic": "Ancient Civilizations",
-                    "questionNumber": 3,
-                    "question": "What ancient civilization built the pyramids?",
-                    "answerOptions": [
-                        {"text": "Roman Empire", "rationale": "The Romans built aqueducts and colosseums, but not the pyramids of Giza.", "isCorrect": false},
-                        {"text": "Ancient Greece", "rationale": "Ancient Greeks built temples like the Parthenon, but not the pyramids.", "isCorrect": false},
-                        {"text": "Ancient Egypt", "rationale": "The ancient Egyptians built the pyramids as tombs for their pharaohs.", "isCorrect": true},
-                        {"text": "Inca Empire", "rationale": "The Incas built stone structures in the Andes mountains, such as Machu Picchu.", "isCorrect": false}
-                    ],
-                    "hint": "This civilization was located along the Nile River."
-                },
-                {
-                    "subtopic": "American History",
-                    "questionNumber": 4,
-                    "question": "Who was the primary author of the U.S. Declaration of Independence?",
-                    "answerOptions": [
-                        {"text": "George Washington", "rationale": "George Washington was the commander of the Continental Army and the first U.S. President.", "isCorrect": false},
-                        {"text": "Benjamin Franklin", "rationale": "Benjamin Franklin was a key founding father, but not the primary author of the Declaration.", "isCorrect": false},
-                        {"text": "Thomas Jefferson", "rationale": "Thomas Jefferson was the primary author of the Declaration of Independence.", "isCorrect": true},
-                        {"text": "John Adams", "rationale": "John Adams was a founding father but not the primary author.", "isCorrect": false}
-                    ],
-                    "hint": "He later became the third President of the United States."
-                },
-                {
-                    "subtopic": "American History",
-                    "questionNumber": 5,
-                    "question": "What was the name of the ship that brought the Pilgrims to North America in 1620?",
-                    "answerOptions": [
-                        {"text": "Santa Maria", "rationale": "The Santa Maria was one of Columbus's ships.", "isCorrect": false},
-                        {"text": "Mayflower", "rationale": "The Mayflower transported the Pilgrims from England to Plymouth, Massachusetts.", "isCorrect": true},
-                        {"text": "Pinta", "rationale": "The Pinta was one of Columbus's ships.", "isCorrect": false},
-                        {"text": "Discovery", "rationale": "The Discovery was one of the ships that brought settlers to Jamestown, Virginia.", "isCorrect": false}
-                    ],
-                    "hint": "This ship's name is also a type of flower."
-                },
-                {
                     "subtopic": "World War I",
-                    "questionNumber": 6,
-                    "question": "Which of the following events is considered the start of World War I?",
+                    "question": "What famous treaty officially ended World War I?",
                     "answerOptions": [
-                        {"text": "The sinking of the Lusitania", "rationale": "The sinking of the Lusitania was a major event but did not start the war.", "isCorrect": false},
-                        {"text": "The German invasion of Poland", "rationale": "This event started World War II.", "isCorrect": false},
-                        {"text": "The assassination of Archduke Franz Ferdinand", "rationale": "The assassination of Archduke Franz Ferdinand of Austria in Sarajevo is widely considered the trigger for WWI.", "isCorrect": true},
-                        {"text": "The signing of the Treaty of Versailles", "rationale": "The Treaty of Versailles formally ended WWI.", "isCorrect": false}
+                        {"text": "Treaty of Paris", "rationale": "This treaty ended the American Revolutionary War.", "isCorrect": false},
+                        {"text": "Treaty of Versailles", "rationale": "The Treaty of Versailles was the peace treaty that officially ended World War I.", "isCorrect": true},
+                        {"text": "Treaty of Ghent", "rationale": "This treaty ended the War of 1812.", "isCorrect": false},
+                        {"text": "Treaty of Tordesillas", "rationale": "This treaty divided the newly discovered lands outside Europe between Portugal and Spain.", "isCorrect": false}
                     ],
-                    "hint": "This event took place in Sarajevo in 1914."
+                    "hint": "It was signed in a palace near Paris."
                 },
                 {
-                    "subtopic": "World War II",
-                    "questionNumber": 7,
-                    "question": "Who led the Soviet Union during World War II?",
+                    "subtopic": "Industrial Revolution",
+                    "question": "Which invention greatly improved textile production during the Industrial Revolution?",
                     "answerOptions": [
-                        {"text": "Vladimir Lenin", "rationale": "Lenin died in 1924, long before WWII.", "isCorrect": false},
-                        {"text": "Mikhail Gorbachev", "rationale": "Gorbachev was the last leader of the Soviet Union in the late 20th century.", "isCorrect": false},
-                        {"text": "Joseph Stalin", "rationale": "Joseph Stalin was the leader of the Soviet Union from the mid-1920s until his death in 1953, leading the country through WWII.", "isCorrect": true},
-                        {"text": "Nikita Khrushchev", "rationale": "Khrushchev came to power after Stalin's death.", "isCorrect": false}
+                        {"text": "The light bulb", "rationale": "The light bulb was invented later.", "isCorrect": false},
+                        {"text": "The cotton gin", "rationale": "The cotton gin was invented by Eli Whitney to quickly separate cotton fibers from their seeds.", "isCorrect": true},
+                        {"text": "The telephone", "rationale": "The telephone was invented much later.", "isCorrect": false},
+                        {"text": "The steam locomotive", "rationale": "The steam locomotive improved transportation, not textile production.", "isCorrect": false}
                     ],
-                    "hint": "He was a powerful dictator known for his purges."
+                    "hint": "This invention was related to the process of cleaning cotton."
                 },
                 {
-                    "subtopic": "Medieval History",
-                    "questionNumber": 8,
-                    "question": "What famous document was signed in 1215 by King John of England?",
+                    "subtopic": "Exploration",
+                    "question": "Who was the first European to sail to India by going around Africa?",
                     "answerOptions": [
-                        {"text": "The Bill of Rights", "rationale": "The English Bill of Rights was signed much later, in 1689.", "isCorrect": false},
-                        {"text": "The Magna Carta", "rationale": "The Magna Carta was a charter of rights agreed to by King John of England.", "isCorrect": true},
-                        {"text": "The Declaration of Independence", "rationale": "The U.S. Declaration of Independence was signed in 1776.", "isCorrect": false},
-                        {"text": "The Edict of Nantes", "rationale": "The Edict of Nantes was a French decree.", "isCorrect": false}
+                        {"text": "Christopher Columbus", "rationale": "Columbus sailed to the Americas.", "isCorrect": false},
+                        {"text": "Ferdinand Magellan", "rationale": "Magellan's expedition circumnavigated the globe.", "isCorrect": false},
+                        {"text": "Vasco da Gama", "rationale": "Vasco da Gama was a Portuguese explorer who was the first to sail directly from Europe to India.", "isCorrect": true},
+                        {"text": "James Cook", "rationale": "James Cook was a British explorer of the Pacific.", "isCorrect": false}
                     ],
-                    "hint": "This document is an important step in the history of human rights."
+                    "hint": "This explorer was Portuguese."
                 },
                 {
-                    "subtopic": "Modern History",
-                    "questionNumber": 9,
+                    "subtopic": "American History",
                     "question": "What major event is often credited with starting the Great Depression?",
                     "answerOptions": [
                         {"text": "The bombing of Pearl Harbor", "rationale": "This event brought the U.S. into World War II.", "isCorrect": false},
@@ -680,16 +654,15 @@
                     "hint": "This event happened on a Tuesday in October."
                 },
                 {
-                    "subtopic": "Modern History",
-                    "questionNumber": 10,
-                    "question": "Who was the first female Prime Minister of the United Kingdom?",
+                    "subtopic": "Medieval History",
+                    "question": "What was the primary goal of the Crusades?",
                     "answerOptions": [
-                        {"text": "Queen Elizabeth I", "rationale": "Queen Elizabeth I was a monarch, not a prime minister.", "isCorrect": false},
-                        {"text": "Margaret Thatcher", "rationale": "Margaret Thatcher was the first female Prime Minister of the UK, serving from 1979 to 1990.", "isCorrect": true},
-                        {"text": "Theresa May", "rationale": "Theresa May was a later female Prime Minister.", "isCorrect": false},
-                        {"text": "Indira Gandhi", "rationale": "Indira Gandhi was the first female Prime Minister of India.", "isCorrect": false}
+                        {"text": "To find a new trade route to Asia.", "rationale": "Explorers sought this, but it was not the goal of the Crusades.", "isCorrect": false},
+                        {"text": "To conquer new lands in Africa.", "rationale": "The Crusades were primarily focused on the Holy Land.", "isCorrect": false},
+                        {"text": "To recapture the Holy Land from Muslim rule.", "rationale": "The Crusades were a series of religious wars initiated by the Latin Church to recover the Holy Land from Islamic rule.", "isCorrect": true},
+                        {"text": "To establish a global empire.", "rationale": "This was not the primary goal of the Crusades.", "isCorrect": false}
                     ],
-                    "hint": "She was known as the 'Iron Lady'."
+                    "hint": "The name 'crusade' comes from the word for 'cross'."
                 }
             ]
         };
@@ -711,82 +684,7 @@
             return totalScore / quizzes.length;
         };
 
-        const calculatePercentile = (currentUserAvg, allClassAverages) => {
-            if (allClassAverages.length <= 1) return 100;
-            const sortedAverages = allClassAverages.slice().sort((a, b) => a - b);
-            const rank = sortedAverages.indexOf(currentUserAvg);
-            return ((rank / (sortedAverages.length - 1)) * 100).toFixed(0);
-        };
-
-        const awardBadges = (myQuizzes, myAverage) => {
-            const badges = [];
-            
-            if (myAverage >= 90 && myQuizzes.length >= 1) {
-                badges.push({ name: 'Top Performer', icon: 'fas fa-star text-yellow-500' });
-            }
-
-            if (myQuizzes.length >= 5) {
-                badges.push({ name: 'Quiz Master', icon: 'fas fa-medal text-gray-500' });
-            }
-
-            const topics = {};
-            myQuizzes.forEach(quiz => {
-                if (!topics[quiz.topic]) {
-                    topics[quiz.topic] = [];
-                }
-                topics[quiz.topic].push(quiz.score);
-            });
-            const consistentTopics = Object.values(topics).filter(scores => {
-                const avg = scores.reduce((sum, s) => sum + s, 0) / scores.length;
-                return avg >= 80;
-            });
-            if (consistentTopics.length >= 3) {
-                badges.push({ name: 'Consistency Champion', icon: 'fas fa-shield-alt text-blue-500' });
-            }
-
-            badgeContainer.innerHTML = '';
-            if (badges.length > 0) {
-                badges.forEach(badge => {
-                    const badgeHtml = `<div class="flex flex-col items-center">
-                                         <i class="${badge.icon} badge-icon"></i>
-                                         <span class="text-xs font-semibold text-gray-600 mt-1">${badge.name}</span>
-                                       </div>`;
-                    badgeContainer.innerHTML += badgeHtml;
-                });
-            } else {
-                badgeContainer.innerHTML = `<i class="fas fa-award text-gray-400 badge-icon"></i><span class="text-gray-500 text-sm">No badges yet</span>`;
-            }
-        };
-
         const renderDashboard = async (myQuizzes) => {
-            const myAverage = calculateAverage(myQuizzes);
-            
-            const q = query(collection(db, `artifacts/${appId}/public/data/students`));
-            const querySnapshot = await getDocs(q);
-            
-            const classAverages = [];
-            let myRank = null;
-            
-            querySnapshot.forEach(doc => {
-                const student = doc.data();
-                // Filter by class name and ensure there's quiz data before calculating average
-                if (student.class === userProfile.class && student.quizzes && student.quizzes.length > 0) {
-                    const studentAvg = calculateAverage(student.quizzes);
-                    classAverages.push(studentAvg);
-                    if (doc.id === userId) {
-                        myRank = studentAvg;
-                    }
-                }
-            });
-            
-            if (myRank !== null) {
-                const percentile = calculatePercentile(myRank, classAverages);
-                percentileValue.textContent = percentile;
-            } else {
-                percentileValue.textContent = '--';
-            }
-
-            awardBadges(myQuizzes, myAverage);
             renderSummary(myQuizzes);
             renderRevisionSuggestions(myQuizzes);
         };
