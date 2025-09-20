@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adaptive Learning Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+        .badge-icon {
+            font-size: 2.5rem;
+        }
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+    <div class="container bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
+        <h1 class="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-8">Adaptive Learning Tracker</h1>
+        
+        <!-- Login Section -->
+        <div id="loginSection" class="p-6 bg-gray-50 rounded-lg border border-gray-200">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">Student Login</h2>
+            <div class="space-y-4">
+                <input type="text" id="studentNameInput" placeholder="Enter Your Full Name" class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="text" id="classNameInput" placeholder="Enter Your Class (e.g., 10th-A)" class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button id="loginBtn" class="w-full bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-200">
+                    Start Learning
+                </button>
+            </div>
+            <p id="authStatus" class="mt-4 text-center text-gray-500 text-sm">Authenticating...</p>
+        </div>
+
+        <!-- Main Tracker Section (Initially Hidden) -->
+        <div id="trackerSection" class="hidden">
+            <div class="flex justify-between items-center mb-6">
+                <div class="text-lg font-medium text-gray-600">
+                    <span id="welcomeName"></span>
+                    <span id="welcomeClass" class="text-sm text-gray-400"></span>
+                </div>
+                <button id="logoutBtn" class="text-sm text-gray-500 hover:text-red-500 transition-colors">Log Out</button>
+            </div>
+
+            <!-- New Dashboard Summary -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+                <div class="bg-indigo-50 p-6 rounded-lg border border-indigo-200">
+                    <h3 class="text-xl font-semibold text-indigo-800 mb-2">My Rank</h3>
+                    <p class="text-4xl font-bold text-indigo-600">
+                        <span id="percentileValue">--</span><span class="text-2xl">%</span>
+                    </p>
+                    <p class="text-sm text-indigo-500">Percentile in class</p>
+                </div>
+                <div class="bg-green-50 p-6 rounded-lg border border-green-200">
+                    <h3 class="text-xl font-semibold text-green-800 mb-2">Badges</h3>
+                    <div id="badgeContainer" class="flex flex-wrap gap-4 items-center justify-center">
+                        <i class="fas fa-award text-gray-400 badge-icon"></i>
+                        <span class="text-gray-500 text-sm">No badges yet</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz & Tracker Section -->
+            <div class="mb-8 p-6 bg-blue-50 rounded-lg border border-blue-200">
+                <h2 class="text-2xl font-semibold text-blue-800 mb-4">Take a Quiz</h2>
+                <div class="flex flex-col sm:flex-row gap-4 mb-4">
+                    <select id="topicInput" class="flex-grow p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Select Topic</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="Biology">Biology</option>
+                        <option value="History">History</option>
+                    </select>
+                    <button id="startQuizBtn" class="w-full sm:w-auto bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-200" disabled>
+                        Start Quiz
+                    </button>
+                </div>
+            </div>
+
+            <div class="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Quiz Performance Summary</h2>
+                <div id="summaryContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Summary will be injected here -->
+                </div>
+            </div>
+    
+            <!-- Revision Suggestions Section -->
+            <div class="p-6 bg-yellow-50 rounded-lg border border-yellow-200">
+                <h2 class="text-2xl font-semibold text-yellow-800 mb-4">Suggested Topics for Revision</h2>
+                <ul id="revisionList" class="list-disc pl-5 space-y-2">
+                    <!-- Revision topics will be injected here -->
+                </ul>
+            </div>
+        </div>
+
+        <!-- Quiz Section (Initially Hidden) -->
+        <div id="quizSection" class="hidden">
+            <h2 id="quizTopicTitle" class="text-2xl font-bold text-center text-gray-800 mb-6"></h2>
+            <form id="quizForm" class="space-y-6">
+                <!-- Quiz questions will be dynamically added here -->
+            </form>
+            <div id="quizResults" class="hidden mt-8 text-center p-6 rounded-lg shadow-md">
+                <p class="text-2xl font-semibold text-gray-700 mb-4">Your Score: <span id="quizScoreDisplay" class="font-bold text-green-600"></span></p>
+                <button id="backToDashboardBtn" class="bg-indigo-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200 mt-4">Back to Dashboard</button>
+                <button id="reviewMistakesBtn" class="bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-200 mt-4">Review Mistakes</button>
+                <button id="saveScoreBtn" class="bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-200 mt-4">Save Score to Tracker</button>
+            </div>
+        </div>
+
+        <!-- Review and Follow-up Quiz Section (Initially Hidden) -->
+        <div id="reviewSection" class="hidden">
+            <h2 id="reviewTitle" class="text-2xl font-bold text-center text-gray-800 mb-6"></h2>
+            <div id="reviewContentContainer">
+                <!-- Mistakes and follow-up quizzes will be dynamically added here -->
+            </div>
+            <div class="mt-8 text-center">
+                <button id="backFromReviewBtn" class="bg-indigo-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200">Back to Dashboard</button>
+            </div>
+        </div>
+
+
+        <!-- Message Box for Alerts -->
+        <div id="messageBox" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center">
+                <p id="messageText" class="text-lg font-medium text-gray-800 mb-4"></p>
+                <button id="messageCloseBtn" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Set Firebase logging level for debugging
+        setLogLevel('debug');
+
+        // Global variables for Firebase
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        // DOM elements
+        const loginSection = document.getElementById('loginSection');
+        const trackerSection = document.getElementById('trackerSection');
+        const studentNameInput = document.getElementById('studentNameInput');
+        const classNameInput = document.getElementById('classNameInput');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const authStatus = document.getElementById('authStatus');
+        const welcomeName = document.getElementById('welcomeName');
+        const welcomeClass = document.getElementById('welcomeClass');
+        const percentileValue = document.getElementById('percentileValue');
+        const badgeContainer = document.getElementById('badgeContainer');
+        const topicInput = document.getElementById('topicInput');
+        const startQuizBtn = document.getElementById('startQuizBtn');
+        const summaryContainer = document.getElementById('summaryContainer');
+        const revisionList = document.getElementById('revisionList');
+        const messageBox = document.getElementById('messageBox');
+        const messageText = document.getElementById('messageText');
+        const messageCloseBtn = document.getElementById('messageCloseBtn');
+
+        const quizSection = document.getElementById('quizSection');
+        const quizTopicTitle = document.getElementById('quizTopicTitle');
+        const quizForm = document.getElementById('quizForm');
+        const quizResults = document.getElementById('quizResults');
+        const quizScoreDisplay = document.getElementById('quizScoreDisplay');
+        const backToDashboardBtn = document.getElementById('backToDashboardBtn');
+        const reviewMistakesBtn = document.getElementById('reviewMistakesBtn');
+        const saveScoreBtn = document.getElementById('saveScoreBtn');
+
+        const reviewSection = document.getElementById('reviewSection');
+        const reviewTitle = document.getElementById('reviewTitle');
+        const reviewContentContainer = document.getElementById('reviewContentContainer');
+        const backFromReviewBtn = document.getElementById('backFromReviewBtn');
+
+        let userProfileRef;
+        let userId;
+        let userProfile = {};
+        const REVISION_THRESHOLD = 70;
+        let currentQuizScore = 0;
+        let currentQuizTopic = '';
+        let currentQuizAttempt = [];
+        let hintGiven = false;
+
+        // Hard-coded quiz data
+        const quizData = {
+            "Physics": [
+                {
+                    "subtopic": "Force & Motion",
+                    "questionNumber": 1,
+                    "question": "What is the SI unit of force?",
+                    "answerOptions": [
+                        {"text": "Joule", "rationale": "Joule is the SI unit of energy and work.", "isCorrect": false},
+                        {"text": "Newton", "rationale": "The Newton is the SI unit of force, defined as the force needed to accelerate a kilogram of mass by one meter per second squared.", "isCorrect": true},
+                        {"text": "Watt", "rationale": "Watt is the SI unit of power.", "isCorrect": false},
+                        {"text": "Pascal", "rationale": "Pascal is the SI unit of pressure.", "isCorrect": false}
+                    ],
+                    "hint": "The unit is named after a famous scientist who developed the laws of motion."
+                },
+                {
+                    "subtopic": "Force & Motion",
+                    "questionNumber": 2,
+                    "question": "Which of Newton's laws of motion states that for every action, there is an equal and opposite reaction?",
+                    "answerOptions": [
+                        {"text": "First Law", "rationale": "The first law describes inertia.", "isCorrect": false},
+                        {"text": "Second Law", "rationale": "The second law relates force, mass, and acceleration.", "isCorrect": false},
+                        {"text": "Third Law", "rationale": "Newton's third law states that forces always occur in equal and opposite pairs.", "isCorrect": true},
+                        {"text": "Law of Gravity", "rationale": "The law of gravity describes the force of attraction between masses.", "isCorrect": false}
+                    ],
+                    "hint": "Consider the interaction between two objects."
+                },
+                {
+                    "subtopic": "Energy",
+                    "questionNumber": 3,
+                    "question": "What is the formula for kinetic energy?",
+                    "answerOptions": [
+                        {"text": "$$E_p = mgh$$", "rationale": "This is the formula for gravitational potential energy.", "isCorrect": false},
+                        {"text": "$$E_k = \\frac{1}{2}mv^2$$", "rationale": "The formula for kinetic energy is one-half times mass times velocity squared.", "isCorrect": true},
+                        {"text": "$$P = W/t$$", "rationale": "This is the formula for power.", "isCorrect": false},
+                        {"text": "$$F = ma$$", "rationale": "This is the formula for Newton's second law of motion.", "isCorrect": false}
+                    ],
+                    "hint": "This energy is related to an object's motion and its mass."
+                },
+                {
+                    "subtopic": "Heat Transfer",
+                    "questionNumber": 4,
+                    "question": "Which type of heat transfer occurs through direct contact?",
+                    "answerOptions": [
+                        {"text": "Conduction", "rationale": "Conduction is the transfer of heat through direct contact between particles of matter.", "isCorrect": true},
+                        {"text": "Convection", "rationale": "Convection is heat transfer through the movement of fluids (liquids or gases).", "isCorrect": false},
+                        {"text": "Radiation", "rationale": "Radiation is the transfer of heat through electromagnetic waves.", "isCorrect": false},
+                        {"text": "Insulation", "rationale": "Insulation is a material that reduces heat transfer.", "isCorrect": false}
+                    ],
+                    "hint": "Think about touching a hot pan with your hand."
+                },
+                {
+                    "subtopic": "Light",
+                    "questionNumber": 5,
+                    "question": "What is the speed of light in a vacuum?",
+                    "answerOptions": [
+                        {"text": "$$3.0 \\times 10^5 m/s$$", "rationale": "This value is incorrect.", "isCorrect": false},
+                        {"text": "$$3.0 \\times 10^8 m/s$$", "rationale": "The speed of light in a vacuum is approximately 299,792,458 meters per second, which is commonly rounded to $$3.0 \\times 10^8 m/s$$.", "isCorrect": true},
+                        {"text": "$$1.5 \\times 10^8 m/s$$", "rationale": "This value is incorrect.", "isCorrect": false},
+                        {"text": "$$6.0 \\times 10^8 m/s$$", "rationale": "This value is incorrect.", "isCorrect": false}
+                    ],
+                    "hint": "It is represented by the letter 'c' in equations like $$E = mc^2$."
+                },
+                {
+                    "subtopic": "Electricity",
+                    "questionNumber": 6,
+                    "question": "What is the SI unit of electric current?",
+                    "answerOptions": [
+                        {"text": "Volt", "rationale": "Volt is the SI unit of electric potential.", "isCorrect": false},
+                        {"text": "Ohm", "rationale": "Ohm is the SI unit of electrical resistance.", "isCorrect": false},
+                        {"text": "Ampere", "rationale": "The Ampere is the SI unit of electric current, named after André-Marie Ampère.", "isCorrect": true},
+                        {"text": "Coulomb", "rationale": "Coulomb is the SI unit of electric charge.", "isCorrect": false}
+                    ],
+                    "hint": "This unit is often abbreviated as 'A'."
+                },
+                {
+                    "subtopic": "Force & Motion",
+                    "questionNumber": 7,
+                    "question": "The tendency of an object to resist a change in its state of motion is known as:",
+                    "answerOptions": [
+                        {"text": "Momentum", "rationale": "Momentum is the product of an object's mass and velocity.", "isCorrect": false},
+                        {"text": "Force", "rationale": "Force is a push or a pull.", "isCorrect": false},
+                        {"text": "Inertia", "rationale": "Inertia is the property of an object to resist changes in its state of motion.", "isCorrect": true},
+                        {"text": "Acceleration", "rationale": "Acceleration is the rate of change of velocity.", "isCorrect": false}
+                    ],
+                    "hint": "This concept is described by Newton's first law."
+                },
+                {
+                    "subtopic": "Energy",
+                    "questionNumber": 8,
+                    "question": "What is the unit of work in physics?",
+                    "answerOptions": [
+                        {"text": "Watt", "rationale": "Watt is the unit of power, which is the rate of doing work.", "isCorrect": false},
+                        {"text": "Joule", "rationale": "Joule is the SI unit of work and energy. It is defined as one Newton-meter.", "isCorrect": true},
+                        {"text": "Newton", "rationale": "Newton is the unit of force, not work.", "isCorrect": false},
+                        {"text": "Calorie", "rationale": "Calorie is a unit of energy, but Joule is the standard SI unit.", "isCorrect": false}
+                    ],
+                    "hint": "The unit is also used for energy."
+                },
+                {
+                    "subtopic": "Vectors & Scalars",
+                    "questionNumber": 9,
+                    "question": "Which of the following is an example of a scalar quantity?",
+                    "answerOptions": [
+                        {"text": "Velocity", "rationale": "Velocity is a vector quantity, as it has both magnitude and direction.", "isCorrect": false},
+                        {"text": "Displacement", "rationale": "Displacement is a vector quantity, as it measures distance in a specific direction.", "isCorrect": false},
+                        {"text": "Speed", "rationale": "Speed is a scalar quantity, as it only has magnitude and no direction.", "isCorrect": true},
+                        {"text": "Force", "rationale": "Force is a vector quantity, as it has both magnitude and direction.", "isCorrect": false}
+                    ],
+                    "hint": "Scalar quantities only have magnitude."
+                },
+                {
+                    "subtopic": "Electricity",
+                    "questionNumber": 10,
+                    "question": "What is the relationship between power, voltage, and current in an electrical circuit?",
+                    "answerOptions": [
+                        {"text": "$$P = V \\times I$$", "rationale": "Power is equal to voltage multiplied by current. This is a fundamental formula in electrical circuits.", "isCorrect": true},
+                        {"text": "$$V = I \\times R$$", "rationale": "This is Ohm's Law, which relates voltage, current, and resistance.", "isCorrect": false},
+                        {"text": "$$I = P \\times V$$", "rationale": "This formula is incorrect.", "isCorrect": false},
+                        {"text": "$$P = R \\times I^2$$", "rationale": "This formula is correct but incomplete as it does not include voltage.", "isCorrect": false}
+                    ],
+                    "hint": "The unit of power is the Watt, the unit of voltage is the Volt, and the unit of current is the Ampere."
+                }
+            ],
+            "Chemistry": [
+                {
+                    "subtopic": "Periodic Table",
+                    "questionNumber": 1,
+                    "question": "What is the chemical symbol for gold?",
+                    "answerOptions": [
+                        {"text": "Ag", "rationale": "Ag is the chemical symbol for silver.", "isCorrect": false},
+                        {"text": "Au", "rationale": "Au is the chemical symbol for gold, from the Latin word 'aurum'.", "isCorrect": true},
+                        {"text": "Fe", "rationale": "Fe is the chemical symbol for iron.", "isCorrect": false},
+                        {"text": "Pb", "rationale": "Pb is the chemical symbol for lead.", "isCorrect": false}
+                    ],
+                    "hint": "The symbol comes from its Latin name, 'aurum'."
+                },
+                {
+                    "subtopic": "Acids & Bases",
+                    "questionNumber": 2,
+                    "question": "What is the pH of a neutral solution?",
+                    "answerOptions": [
+                        {"text": "0", "rationale": "A pH of 0 indicates a very strong acid.", "isCorrect": false},
+                        {"text": "7", "rationale": "A pH of 7 is considered neutral, such as pure water.", "isCorrect": true},
+                        {"text": "14", "rationale": "A pH of 14 indicates a very strong base.", "isCorrect": false},
+                        {"text": "1", "rationale": "A pH of 1 indicates a strong acid.", "isCorrect": false}
+                    ],
+                    "hint": "Pure water has this pH value at standard temperature."
+                },
+                {
+                    "subtopic": "Atmosphere",
+                    "questionNumber": 3,
+                    "question": "What is the most abundant gas in Earth's atmosphere?",
+                    "answerOptions": [
+                        {"text": "Oxygen", "rationale": "Oxygen makes up about 21% of the atmosphere.", "isCorrect": false},
+                        {"text": "Carbon dioxide", "rationale": "Carbon dioxide makes up a very small percentage of the atmosphere.", "isCorrect": false},
+                        {"text": "Argon", "rationale": "Argon is a noble gas that makes up less than 1% of the atmosphere.", "isCorrect": false},
+                        {"text": "Nitrogen", "rationale": "Nitrogen gas ($$N_2$$) makes up approximately 78% of Earth's atmosphere.", "isCorrect": true}
+                    ],
+                    "hint": "This element is a major component of air and is found in most living things."
+                },
+                {
+                    "subtopic": "States of Matter",
+                    "questionNumber": 4,
+                    "question": "What is the name of the process by which a solid turns directly into a gas?",
+                    "answerOptions": [
+                        {"text": "Melting", "rationale": "Melting is the process of a solid changing to a liquid.", "isCorrect": false},
+                        {"text": "Sublimation", "rationale": "Sublimation is the transition of a substance directly from the solid to the gas state.", "isCorrect": true},
+                        {"text": "Evaporation", "rationale": "Evaporation is the process of a liquid changing to a gas.", "isCorrect": false},
+                        {"text": "Condensation", "rationale": "Condensation is the process of a gas changing to a liquid.", "isCorrect": false}
+                    ],
+                    "hint": "Dry ice is a common example of a substance that undergoes this process."
+                },
+                {
+                    "subtopic": "Periodic Table",
+                    "questionNumber": 5,
+                    "question": "Which of the following is a noble gas?",
+                    "answerOptions": [
+                        {"text": "Chlorine", "rationale": "Chlorine is a halogen.", "isCorrect": false},
+                        {"text": "Hydrogen", "rationale": "Hydrogen is in Group 1 of the periodic table.", "isCorrect": false},
+                        {"text": "Helium", "rationale": "Helium is an element in Group 18 of the periodic table, known as the noble gases.", "isCorrect": true},
+                        {"text": "Sodium", "rationale": "Sodium is an alkali metal.", "isCorrect": false}
+                    ],
+                    "hint": "This type of gas is known for being non-reactive."
+                },
+                {
+                    "subtopic": "Atomic Structure",
+                    "questionNumber": 6,
+                    "question": "What is the charge of a neutron?",
+                    "answerOptions": [
+                        {"text": "Positive", "rationale": "Protons have a positive charge.", "isCorrect": false},
+                        {"text": "Negative", "rationale": "Electrons have a negative charge.", "isCorrect": false},
+                        {"text": "Neutral", "rationale": "Neutrons have no charge and are therefore neutral.", "isCorrect": true},
+                        {"text": "Variable", "rationale": "The charge is not variable; it is always zero.", "isCorrect": false}
+                    ],
+                    "hint": "The name of this subatomic particle provides a clue about its charge."
+                },
+                {
+                    "subtopic": "Chemical Bonds",
+                    "questionNumber": 7,
+                    "question": "Which bond involves the sharing of electrons between atoms?",
+                    "answerOptions": [
+                        {"text": "Ionic bond", "rationale": "An ionic bond involves the transfer of electrons from one atom to another.", "isCorrect": false},
+                        {"text": "Metallic bond", "rationale": "A metallic bond involves a sea of delocalized electrons shared among metal atoms.", "isCorrect": false},
+                        {"text": "Covalent bond", "rationale": "A covalent bond is a chemical bond that involves the sharing of electron pairs between atoms.", "isCorrect": true},
+                        {"text": "Hydrogen bond", "rationale": "A hydrogen bond is a weak attraction between a hydrogen atom and an electronegative atom.", "isCorrect": false}
+                    ],
+                    "hint": "Think about how water molecules are formed."
+                },
+                {
+                    "subtopic": "Compounds",
+                    "questionNumber": 8,
+                    "question": "What is the common name for the compound $$NaCl$$?",
+                    "answerOptions": [
+                        {"text": "Baking soda", "rationale": "Baking soda is sodium bicarbonate ($$NaHCO_3$$).", "isCorrect": false},
+                        {"text": "Table salt", "rationale": "The compound $$NaCl$$ is sodium chloride, commonly known as table salt.", "isCorrect": true},
+                        {"text": "Ammonia", "rationale": "Ammonia is $$NH_3$$.", "isCorrect": false},
+                        {"text": "Water", "rationale": "Water is $$H_2O$$.", "isCorrect": false}
+                    ],
+                    "hint": "This is a common seasoning used in cooking."
+                },
+                {
+                    "subtopic": "Periodic Table",
+                    "questionNumber": 9,
+                    "question": "In the periodic table, what is the name for a horizontal row?",
+                    "answerOptions": [
+                        {"text": "Group", "rationale": "A group is a vertical column in the periodic table.", "isCorrect": false},
+                        {"text": "Family", "rationale": "A family is another name for a group.", "isCorrect": false},
+                        {"text": "Period", "rationale": "A period is a horizontal row in the periodic table.", "isCorrect": true},
+                        {"text": "Block", "rationale": "A block refers to a section of the periodic table.", "isCorrect": false}
+                    ],
+                    "hint": "Elements in the same horizontal row have the same number of electron shells."
+                },
+                {
+                    "subtopic": "Compounds",
+                    "questionNumber": 10,
+                    "question": "What is the chemical formula for carbon dioxide?",
+                    "answerOptions": [
+                        {"text": "$$CO$$", "rationale": "This is the formula for carbon monoxide.", "isCorrect": false},
+                        {"text": "CO2", "rationale": "Carbon dioxide is a compound with one carbon atom and two oxygen atoms.", "isCorrect": true},
+                        {"text": "C2O", "rationale": "This formula is incorrect.", "isCorrect": false},
+                        {"text": "C2O2", "rationale": "This formula is incorrect.", "isCorrect": false}
+                    ],
+                    "hint": "The 'di-' prefix in the name indicates the number of oxygen atoms."
+                }
+            ],
+            "Biology": [
+                {
+                    "subtopic": "Cell Biology",
+                    "questionNumber": 1,
+                    "question": "What is the powerhouse of the cell?",
+                    "answerOptions": [
+                        {"text": "Nucleus", "rationale": "The nucleus contains the cell's genetic material and controls cell activities.", "isCorrect": false},
+                        {"text": "Mitochondria", "rationale": "Mitochondria are often referred to as the powerhouse of the cell because they generate most of the cell's supply of ATP.", "isCorrect": true},
+                        {"text": "Ribosome", "rationale": "Ribosomes are responsible for protein synthesis.", "isCorrect": false},
+                        {"text": "Vacuole", "rationale": "A vacuole is a storage sac.", "isCorrect": false}
+                    ],
+                    "hint": "This organelle is responsible for cellular respiration."
+                },
+                {
+                    "subtopic": "Genetics",
+                    "questionNumber": 2,
+                    "question": "Which molecule carries genetic instructions for the development, functioning, growth, and reproduction of all known organisms and many viruses?",
+                    "answerOptions": [
+                        {"text": "RNA", "rationale": "RNA is involved in protein synthesis and genetic expression but is not the primary carrier of genetic instructions for all organisms.", "isCorrect": false},
+                        {"text": "DNA", "rationale": "Deoxyribonucleic acid (DNA) is the molecule that contains the genetic code of organisms.", "isCorrect": true},
+                        {"text": "Protein", "rationale": "Proteins are large biomolecules, but they do not carry the genetic instructions.", "isCorrect": false},
+                        {"text": "Lipid", "rationale": "Lipids are a class of organic compounds that include fats, oils, and waxes.", "isCorrect": false}
+                    ],
+                    "hint": "This molecule's full name is Deoxyribonucleic acid."
+                },
+                {
+                    "subtopic": "Botany",
+                    "questionNumber": 3,
+                    "question": "What is the process by which plants use sunlight, water, and carbon dioxide to create their own food?",
+                    "answerOptions": [
+                        {"text": "Respiration", "rationale": "Respiration is the process of breaking down food to release energy.", "isCorrect": false},
+                        {"text": "Transpiration", "rationale": "Transpiration is the process of water movement through a plant and its evaporation from aerial parts.", "isCorrect": false},
+                        {"text": "Photosynthesis", "rationale": "Photosynthesis is the process that converts light energy into chemical energy to create food.", "isCorrect": true},
+                        {"text": "Fermentation", "rationale": "Fermentation is a metabolic process that produces chemical changes in organic substrates through the action of enzymes.", "isCorrect": false}
+                    ],
+                    "hint": "This process is where plants 'make' their own food."
+                },
+                {
+                    "subtopic": "Human Anatomy",
+                    "questionNumber": 4,
+                    "question": "What part of the blood is responsible for carrying oxygen?",
+                    "answerOptions": [
+                        {"text": "White blood cells", "rationale": "White blood cells are part of the immune system and fight infection.", "isCorrect": false},
+                        {"text": "Platelets", "rationale": "Platelets are responsible for blood clotting.", "isCorrect": false},
+                        {"text": "Red blood cells", "rationale": "Red blood cells contain hemoglobin, which binds to oxygen and transports it throughout the body.", "isCorrect": true},
+                        {"text": "Plasma", "rationale": "Plasma is the liquid component of blood that holds the cells in suspension.", "isCorrect": false}
+                    ],
+                    "hint": "This component of blood gives it its color."
+                },
+                {
+                    "subtopic": "Human Anatomy",
+                    "questionNumber": 5,
+                    "question": "What is the primary function of the large intestine?",
+                    "answerOptions": [
+                        {"text": "Digesting food", "rationale": "Most digestion occurs in the stomach and small intestine.", "isCorrect": false},
+                        {"text": "Absorbing water and electrolytes", "rationale": "The large intestine's primary function is to absorb water and electrolytes from indigestible food matter.", "isCorrect": true},
+                        {"text": "Producing insulin", "rationale": "Insulin is produced by the pancreas.", "isCorrect": false},
+                        {"text": "Filtering blood", "rationale": "The kidneys and liver are responsible for filtering blood.", "isCorrect": false}
+                    ],
+                    "hint": "This organ's main job is to remove water from waste."
+                },
+                {
+                    "subtopic": "Ecology",
+                    "questionNumber": 6,
+                    "question": "What is the term for a group of organisms of the same species living in a particular area?",
+                    "answerOptions": [
+                        {"text": "Community", "rationale": "A community is a group of different species living and interacting in a particular area.", "isCorrect": false},
+                        {"text": "Ecosystem", "rationale": "An ecosystem includes all the living organisms in an area, as well as the non-living parts of the environment.", "isCorrect": false},
+                        {"text": "Population", "rationale": "A population is defined as a group of individuals of the same species living in a specific geographical area.", "isCorrect": true},
+                        {"text": "Biome", "rationale": "A biome is a large area of the planet classified by its climate and the plants and animals that live there.", "isCorrect": false}
+                    ],
+                    "hint": "This term is used to describe a single species in a specific location."
+                },
+                {
+                    "subtopic": "Zoology",
+                    "questionNumber": 7,
+                    "question": "Which of the following is an example of an invertebrate?",
+                    "answerOptions": [
+                        {"text": "Frog", "rationale": "Frogs are vertebrates as they have a backbone.", "isCorrect": false},
+                        {"text": "Fish", "rationale": "Fish are vertebrates as they have a backbone.", "isCorrect": false},
+                        {"text": "Spider", "rationale": "Spiders are invertebrates as they lack a backbone.", "isCorrect": true},
+                        {"text": "Bird", "rationale": "Birds are vertebrates as they have a backbone.", "isCorrect": false}
+                    ],
+                    "hint": "Invertebrates are animals that do not have a backbone."
+                },
+                {
+                    "subtopic": "Human Anatomy",
+                    "questionNumber": 8,
+                    "question": "Which organ is responsible for pumping blood throughout the body?",
+                    "answerOptions": [
+                        {"text": "Lungs", "rationale": "The lungs are responsible for gas exchange, taking in oxygen and releasing carbon dioxide.", "isCorrect": false},
+                        {"text": "Stomach", "rationale": "The stomach is responsible for breaking down food.", "isCorrect": false},
+                        {"text": "Heart", "rationale": "The heart is a muscular organ that pumps blood through the circulatory system.", "isCorrect": true},
+                        {"text": "Liver", "rationale": "The liver is a key organ for detoxification and metabolism.", "isCorrect": false}
+                    ],
+                    "hint": "This organ beats around 60 to 100 times per minute in a resting adult."
+                },
+                {
+                    "subtopic": "Genetics",
+                    "questionNumber": 9,
+                    "question": "What is the unit of heredity that is transferred from a parent to offspring?",
+                    "answerOptions": [
+                        {"text": "Cell", "rationale": "A cell is the basic unit of life.", "isCorrect": false},
+                        {"text": "Gene", "rationale": "A gene is a segment of DNA that codes for a specific trait and is passed from parent to offspring.", "isCorrect": true},
+                        {"text": "Protein", "rationale": "A protein is a molecule made from a gene, but it is not the unit of heredity itself.", "isCorrect": false},
+                        {"text": "Chromosome", "rationale": "A chromosome is a structure made of DNA and proteins, containing many genes.", "isCorrect": false}
+                    ],
+                    "hint": "This term is what Gregor Mendel studied in his experiments with pea plants."
+                },
+                {
+                    "subtopic": "General Biology",
+                    "questionNumber": 10,
+                    "question": "The scientific study of living organisms, including their structure, function, growth, evolution, and distribution, is known as:",
+                    "answerOptions": [
+                        {"text": "Chemistry", "rationale": "Chemistry is the study of matter and its properties.", "isCorrect": false},
+                        {"text": "Physics", "rationale": "Physics is the study of matter, motion, energy, and force.", "isCorrect": false},
+                        {"text": "Biology", "rationale": "Biology is the natural science that studies life and living organisms.", "isCorrect": true},
+                        {"text": "Geology", "rationale": "Geology is the study of the Earth, its materials, and the processes that shape it.", "isCorrect": false}
+                    ],
+                    "hint": "The name of this field comes from the Greek words for 'life' and 'study'."
+                }
+            ],
+            "History": [
+                {
+                    "subtopic": "Ancient Rome",
+                    "questionNumber": 1,
+                    "question": "Who was the first emperor of Rome?",
+                    "answerOptions": [
+                        {"text": "Julius Caesar", "rationale": "Julius Caesar was a Roman general and statesman, but he was not an emperor.", "isCorrect": false},
+                        {"text": "Augustus", "rationale": "Augustus, born Gaius Octavius, was the first Roman emperor.", "isCorrect": true},
+                        {"text": "Nero", "rationale": "Nero was a later Roman emperor known for his tyrannical rule.", "isCorrect": false},
+                        {"text": "Constantine the Great", "rationale": "Constantine was a Roman emperor who ruled much later than Augustus.", "isCorrect": false}
+                    ],
+                    "hint": "He was the adopted son of Julius Caesar."
+                },
+                {
+                    "subtopic": "Industrial Revolution",
+                    "questionNumber": 2,
+                    "question": "In which country did the Industrial Revolution begin?",
+                    "answerOptions": [
+                        {"text": "Germany", "rationale": "The Industrial Revolution spread to Germany later.", "isCorrect": false},
+                        {"text": "United States", "rationale": "The Industrial Revolution spread to the United States later.", "isCorrect": false},
+                        {"text": "France", "rationale": "The Industrial Revolution spread to France later.", "isCorrect": false},
+                        {"text": "Great Britain", "rationale": "The Industrial Revolution began in Great Britain in the late 18th century.", "isCorrect": true},
+                    ],
+                    "hint": "Think about the country where the steam engine was developed."
+                },
+                {
+                    "subtopic": "Ancient Civilizations",
+                    "questionNumber": 3,
+                    "question": "What ancient civilization built the pyramids?",
+                    "answerOptions": [
+                        {"text": "Roman Empire", "rationale": "The Romans built aqueducts and colosseums, but not the pyramids of Giza.", "isCorrect": false},
+                        {"text": "Ancient Greece", "rationale": "Ancient Greeks built temples like the Parthenon, but not the pyramids.", "isCorrect": false},
+                        {"text": "Ancient Egypt", "rationale": "The ancient Egyptians built the pyramids as tombs for their pharaohs.", "isCorrect": true},
+                        {"text": "Inca Empire", "rationale": "The Incas built stone structures in the Andes mountains, such as Machu Picchu.", "isCorrect": false}
+                    ],
+                    "hint": "This civilization was located along the Nile River."
+                },
+                {
+                    "subtopic": "American History",
+                    "questionNumber": 4,
+                    "question": "Who was the primary author of the U.S. Declaration of Independence?",
+                    "answerOptions": [
+                        {"text": "George Washington", "rationale": "George Washington was the commander of the Continental Army and the first U.S. President.", "isCorrect": false},
+                        {"text": "Benjamin Franklin", "rationale": "Benjamin Franklin was a key founding father, but not the primary author of the Declaration.", "isCorrect": false},
+                        {"text": "Thomas Jefferson", "rationale": "Thomas Jefferson was the primary author of the Declaration of Independence.", "isCorrect": true},
+                        {"text": "John Adams", "rationale": "John Adams was a founding father but not the primary author.", "isCorrect": false}
+                    ],
+                    "hint": "He later became the third President of the United States."
+                },
+                {
+                    "subtopic": "American History",
+                    "questionNumber": 5,
+                    "question": "What was the name of the ship that brought the Pilgrims to North America in 1620?",
+                    "answerOptions": [
+                        {"text": "Santa Maria", "rationale": "The Santa Maria was one of Columbus's ships.", "isCorrect": false},
+                        {"text": "Mayflower", "rationale": "The Mayflower transported the Pilgrims from England to Plymouth, Massachusetts.", "isCorrect": true},
+                        {"text": "Pinta", "rationale": "The Pinta was one of Columbus's ships.", "isCorrect": false},
+                        {"text": "Discovery", "rationale": "The Discovery was one of the ships that brought settlers to Jamestown, Virginia.", "isCorrect": false}
+                    ],
+                    "hint": "This ship's name is also a type of flower."
+                },
+                {
+                    "subtopic": "World War I",
+                    "questionNumber": 6,
+                    "question": "Which of the following events is considered the start of World War I?",
+                    "answerOptions": [
+                        {"text": "The sinking of the Lusitania", "rationale": "The sinking of the Lusitania was a major event but did not start the war.", "isCorrect": false},
+                        {"text": "The German invasion of Poland", "rationale": "This event started World War II.", "isCorrect": false},
+                        {"text": "The assassination of Archduke Franz Ferdinand", "rationale": "The assassination of Archduke Franz Ferdinand of Austria in Sarajevo is widely considered the trigger for WWI.", "isCorrect": true},
+                        {"text": "The signing of the Treaty of Versailles", "rationale": "The Treaty of Versailles formally ended WWI.", "isCorrect": false}
+                    ],
+                    "hint": "This event took place in Sarajevo in 1914."
+                },
+                {
+                    "subtopic": "World War II",
+                    "questionNumber": 7,
+                    "question": "Who led the Soviet Union during World War II?",
+                    "answerOptions": [
+                        {"text": "Vladimir Lenin", "rationale": "Lenin died in 1924, long before WWII.", "isCorrect": false},
+                        {"text": "Mikhail Gorbachev", "rationale": "Gorbachev was the last leader of the Soviet Union in the late 20th century.", "isCorrect": false},
+                        {"text": "Joseph Stalin", "rationale": "Joseph Stalin was the leader of the Soviet Union from the mid-1920s until his death in 1953, leading the country through WWII.", "isCorrect": true},
+                        {"text": "Nikita Khrushchev", "rationale": "Khrushchev came to power after Stalin's death.", "isCorrect": false}
+                    ],
+                    "hint": "He was a powerful dictator known for his purges."
+                },
+                {
+                    "subtopic": "Medieval History",
+                    "questionNumber": 8,
+                    "question": "What famous document was signed in 1215 by King John of England?",
+                    "answerOptions": [
+                        {"text": "The Bill of Rights", "rationale": "The English Bill of Rights was signed much later, in 1689.", "isCorrect": false},
+                        {"text": "The Magna Carta", "rationale": "The Magna Carta was a charter of rights agreed to by King John of England.", "isCorrect": true},
+                        {"text": "The Declaration of Independence", "rationale": "The U.S. Declaration of Independence was signed in 1776.", "isCorrect": false},
+                        {"text": "The Edict of Nantes", "rationale": "The Edict of Nantes was a French decree.", "isCorrect": false}
+                    ],
+                    "hint": "This document is an important step in the history of human rights."
+                },
+                {
+                    "subtopic": "Modern History",
+                    "questionNumber": 9,
+                    "question": "What major event is often credited with starting the Great Depression?",
+                    "answerOptions": [
+                        {"text": "The bombing of Pearl Harbor", "rationale": "This event brought the U.S. into World War II.", "isCorrect": false},
+                        {"text": "The assassination of JFK", "rationale": "This event occurred much later in the 20th century.", "isCorrect": false},
+                        {"text": "The stock market crash of 1929", "rationale": "The crash of the stock market in October 1929, known as Black Tuesday, is widely seen as the beginning of the Great Depression.", "isCorrect": true},
+                        {"text": "The end of World War I", "rationale": "While related, the war's end was not the direct cause of the Great Depression.", "isCorrect": false}
+                    ],
+                    "hint": "This event happened on a Tuesday in October."
+                },
+                {
+                    "subtopic": "Modern History",
+                    "questionNumber": 10,
+                    "question": "Who was the first female Prime Minister of the United Kingdom?",
+                    "answerOptions": [
+                        {"text": "Queen Elizabeth I", "rationale": "Queen Elizabeth I was a monarch, not a prime minister.", "isCorrect": false},
+                        {"text": "Margaret Thatcher", "rationale": "Margaret Thatcher was the first female Prime Minister of the UK, serving from 1979 to 1990.", "isCorrect": true},
+                        {"text": "Theresa May", "rationale": "Theresa May was a later female Prime Minister.", "isCorrect": false},
+                        {"text": "Indira Gandhi", "rationale": "Indira Gandhi was the first female Prime Minister of India.", "isCorrect": false}
+                    ],
+                    "hint": "She was known as the 'Iron Lady'."
+                }
+            ]
+        };
+
+        // Function to show a custom message box
+        const showMessage = (message) => {
+            messageText.textContent = message;
+            messageBox.classList.remove('hidden');
+        };
+
+        // Event listener for the close button on the message box
+        messageCloseBtn.addEventListener('click', () => {
+            messageBox.classList.add('hidden');
+        });
+
+        const calculateAverage = (quizzes) => {
+            if (quizzes.length === 0) return 0;
+            const totalScore = quizzes.reduce((sum, quiz) => sum + quiz.score, 0);
+            return totalScore / quizzes.length;
+        };
+
+        const calculatePercentile = (currentUserAvg, allClassAverages) => {
+            if (allClassAverages.length <= 1) return 100;
+            const sortedAverages = allClassAverages.slice().sort((a, b) => a - b);
+            const rank = sortedAverages.indexOf(currentUserAvg);
+            return ((rank / (sortedAverages.length - 1)) * 100).toFixed(0);
+        };
+
+        const awardBadges = (myQuizzes, myAverage) => {
+            const badges = [];
+            
+            if (myAverage >= 90 && myQuizzes.length >= 1) {
+                badges.push({ name: 'Top Performer', icon: 'fas fa-star text-yellow-500' });
+            }
+
+            if (myQuizzes.length >= 5) {
+                badges.push({ name: 'Quiz Master', icon: 'fas fa-medal text-gray-500' });
+            }
+
+            const topics = {};
+            myQuizzes.forEach(quiz => {
+                if (!topics[quiz.topic]) {
+                    topics[quiz.topic] = [];
+                }
+                topics[quiz.topic].push(quiz.score);
+            });
+            const consistentTopics = Object.values(topics).filter(scores => {
+                const avg = scores.reduce((sum, s) => sum + s, 0) / scores.length;
+                return avg >= 80;
+            });
+            if (consistentTopics.length >= 3) {
+                badges.push({ name: 'Consistency Champion', icon: 'fas fa-shield-alt text-blue-500' });
+            }
+
+            badgeContainer.innerHTML = '';
+            if (badges.length > 0) {
+                badges.forEach(badge => {
+                    const badgeHtml = `<div class="flex flex-col items-center">
+                                         <i class="${badge.icon} badge-icon"></i>
+                                         <span class="text-xs font-semibold text-gray-600 mt-1">${badge.name}</span>
+                                       </div>`;
+                    badgeContainer.innerHTML += badgeHtml;
+                });
+            } else {
+                badgeContainer.innerHTML = `<i class="fas fa-award text-gray-400 badge-icon"></i><span class="text-gray-500 text-sm">No badges yet</span>`;
+            }
+        };
+
+        const renderDashboard = async (myQuizzes) => {
+            const myAverage = calculateAverage(myQuizzes);
+            
+            const q = query(collection(db, `artifacts/${appId}/public/data/students`));
+            const querySnapshot = await getDocs(q);
+            
+            const classAverages = [];
+            let myRank = null;
+            
+            querySnapshot.forEach(doc => {
+                const student = doc.data();
+                // Filter by class name and ensure there's quiz data before calculating average
+                if (student.class === userProfile.class && student.quizzes && student.quizzes.length > 0) {
+                    const studentAvg = calculateAverage(student.quizzes);
+                    classAverages.push(studentAvg);
+                    if (doc.id === userId) {
+                        myRank = studentAvg;
+                    }
+                }
+            });
+            
+            if (myRank !== null) {
+                const percentile = calculatePercentile(myRank, classAverages);
+                percentileValue.textContent = percentile;
+            } else {
+                percentileValue.textContent = '--';
+            }
+
+            awardBadges(myQuizzes, myAverage);
+            renderSummary(myQuizzes);
+            renderRevisionSuggestions(myQuizzes);
+        };
+
+        const renderSummary = (quizzes) => {
+            const topics = {};
+            quizzes.forEach(quiz => {
+                if (!topics[quiz.topic]) {
+                    topics[quiz.topic] = { totalScore: 0, count: 0, highestScore: 0, lowestScore: 101, quizzes: [] };
+                }
+                topics[quiz.topic].totalScore += quiz.score;
+                topics[quiz.topic].count++;
+                topics[quiz.topic].quizzes.push(quiz);
+
+                if (quiz.score > topics[quiz.topic].highestScore) {
+                    topics[quiz.topic].highestScore = quiz.score;
+                }
+                if (quiz.score < topics[quiz.topic].lowestScore) {
+                    topics[quiz.topic].lowestScore = quiz.score;
+                }
+            });
+
+            summaryContainer.innerHTML = '';
+            
+            for (const topic in topics) {
+                const data = topics[topic];
+                const average = data.totalScore / data.count;
+                const summaryHtml = `
+                    <div class="bg-white p-4 rounded-lg shadow-md border border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-700">${topic}</h3>
+                        <p class="text-gray-600">Average Score: <span class="font-medium text-lg">${average.toFixed(1)}%</span></p>
+                        <p class="text-gray-600">Total Quizzes: ${data.count}</p>
+                        <p class="text-gray-600">Highest Score: ${data.highestScore}%</p>
+                        <p class="text-gray-600">Lowest Score: ${data.lowestScore}%</p>
+                        <div class="mt-4 space-y-2">
+                            ${data.quizzes.map((q, index) => `
+                                <div class="flex justify-between items-center bg-gray-100 p-2 rounded-lg">
+                                    <span class="text-sm text-gray-600">${new Date(q.timestamp).toLocaleString()} (${q.type === 'initial' ? 'Initial' : 'Follow-up'})</span>
+                                    <button class="review-past-quiz-btn bg-indigo-500 text-white text-xs font-semibold py-1 px-3 rounded-full hover:bg-indigo-600 transition-colors" data-quiz-index="${quizzes.indexOf(q)}">Review Quiz</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                summaryContainer.innerHTML += summaryHtml;
+            }
+
+            // Add event listeners for the review buttons
+            document.querySelectorAll('.review-past-quiz-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const quizIndex = e.target.getAttribute('data-quiz-index');
+                    if (userProfile.quizzes[quizIndex]) {
+                        renderReviewPage(userProfile.quizzes[quizIndex]);
+                    }
+                });
+            });
+        };
+
+        const renderRevisionSuggestions = (quizzes) => {
+            const incorrectSubtopics = {};
+            quizzes.forEach(quiz => {
+                if (quiz.attempt) {
+                    quiz.attempt.forEach(q => {
+                        if (!q.isCorrect) {
+                            const subtopic = q.subtopic || 'General';
+                            if (!incorrectSubtopics[subtopic]) {
+                                incorrectSubtopics[subtopic] = { count: 0, topic: quiz.topic };
+                            }
+                            incorrectSubtopics[subtopic].count++;
+                        }
+                    });
+                }
+            });
+
+            const sortedSubtopics = Object.entries(incorrectSubtopics)
+                .map(([name, data]) => ({ name, count: data.count, topic: data.topic }))
+                .sort((a, b) => b.count - a.count);
+
+            revisionList.innerHTML = '';
+            
+            if (sortedSubtopics.length > 0) {
+                sortedSubtopics.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.className = "bg-yellow-100 p-2 rounded-lg border border-yellow-300 shadow-sm";
+                    listItem.innerHTML = `<span class="font-medium">${item.name}</span> (${item.topic}) - ${item.count} mistakes`;
+                    revisionList.appendChild(listItem);
+                });
+            } else {
+                revisionList.innerHTML = '<li class="text-yellow-700">No topics are currently flagged for revision. Great job!</li>';
+            }
+        };
+
+        const handleAuthAndProfile = async (user) => {
+            if (user) {
+                console.log("User authenticated:", user.uid);
+                userId = user.uid;
+                userProfileRef = doc(db, `artifacts/${appId}/public/data/students/${userId}`);
+                
+                const userDoc = await getDocs(query(collection(db, `artifacts/${appId}/public/data/students`), where('userId', '==', userId)));
+                
+                if (userDoc.docs.length > 0) {
+                    console.log("Profile found.");
+                    userProfile = userDoc.docs[0].data();
+                    welcomeName.textContent = `Welcome, ${userProfile.name}!`;
+                    welcomeClass.textContent = `(Class: ${userProfile.class})`;
+                    loginSection.classList.add('hidden');
+                    trackerSection.classList.remove('hidden');
+                    startDataListener();
+                } else {
+                    console.log("Profile not found, showing login.");
+                    loginSection.classList.remove('hidden');
+                    trackerSection.classList.add('hidden');
+                    authStatus.textContent = "Authenticated. Enter your details to start.";
+                }
+            } else {
+                console.log("No user authenticated. Signing in.");
+                loginSection.classList.remove('hidden');
+                trackerSection.classList.add('hidden');
+                authStatus.textContent = "Not authenticated. Attempting anonymous sign-in.";
+                try {
+                     if (initialAuthToken) {
+                         await signInWithCustomToken(auth, initialAuthToken);
+                     } else {
+                         await signInAnonymously(auth);
+                     }
+                } catch(error) {
+                    console.error("Error during initial sign-in:", error);
+                    authStatus.textContent = "Authentication failed.";
+                }
+            }
+        };
+
+        onAuthStateChanged(auth, handleAuthAndProfile);
+
+        loginBtn.addEventListener('click', async () => {
+            const name = studentNameInput.value.trim();
+            const className = classNameInput.value.trim();
+            
+            if (!name || !className) {
+                showMessage("Please enter both your name and class.");
+                return;
+            }
+
+            try {
+                userProfile = { name, class: className, quizzes: [], userId: userId };
+                await setDoc(userProfileRef, userProfile);
+                
+                welcomeName.textContent = `Welcome, ${userProfile.name}!`;
+                welcomeClass.textContent = `(Class: ${userProfile.class})`;
+                loginSection.classList.add('hidden');
+                trackerSection.classList.remove('hidden');
+                startDataListener();
+            } catch (error) {
+                console.error("Error logging in: ", error);
+                showMessage("Failed to log in. Please try again.");
+            }
+        });
+        
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+            } catch (error) {
+                console.error("Error logging out: ", error);
+                showMessage("Failed to log out. Please try again.");
+            }
+        });
+
+        const startDataListener = () => {
+            onSnapshot(userProfileRef, (doc) => {
+                if (doc.exists()) {
+                    userProfile = doc.data();
+                    const quizzes = userProfile.quizzes || [];
+                    renderDashboard(quizzes);
+                } else {
+                     showMessage("Your profile data was not found. Please log in again.");
+                     signOut(auth);
+                }
+            });
+        };
+
+        topicInput.addEventListener('change', () => {
+            if (topicInput.value) {
+                startQuizBtn.disabled = false;
+            } else {
+                startQuizBtn.disabled = true;
+            }
+        });
+        
+        startQuizBtn.addEventListener('click', () => {
+            currentQuizTopic = topicInput.value;
+            if (!currentQuizTopic) {
+                showMessage("Please select a topic to start a quiz.");
+                return;
+            }
+
+            trackerSection.classList.add('hidden');
+            quizSection.classList.remove('hidden');
+            renderQuiz(currentQuizTopic);
+        });
+
+        const renderQuiz = (topic) => {
+            const questions = quizData[topic];
+            if (!questions) {
+                showMessage("Quiz questions for this topic are not available.");
+                return;
+            }
+            
+            quizTopicTitle.textContent = `${topic} Quiz`;
+            quizForm.innerHTML = '';
+            quizResults.classList.add('hidden');
+            currentQuizAttempt = [];
+
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'bg-gray-50 p-6 rounded-lg border border-gray-200 shadow-md';
+                questionDiv.innerHTML = `
+                    <p class="text-xl font-semibold text-gray-800 mb-4">${index + 1}. ${q.question}</p>
+                    <div class="space-y-3">
+                        ${q.answerOptions.map((option, optionIndex) => `
+                            <label class="flex items-center p-3 rounded-lg border border-gray-300 cursor-pointer hover:bg-white transition-colors">
+                                <input type="radio" name="question-${index}" value="${option.text}" class="mr-3" data-is-correct="${option.isCorrect}">
+                                <span class="text-gray-700">${option.text}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <p id="hint-text-${index}" class="text-sm text-gray-500 mt-4 hidden">${q.hint}</p>
+                    <button type="button" class="show-hint-btn text-blue-500 hover:text-blue-700 text-sm mt-2 focus:outline-none" data-index="${index}">Show Hint</button>
+                `;
+                quizForm.appendChild(questionDiv);
+            });
+
+            // Add submit button
+            const submitBtn = document.createElement('button');
+            submitBtn.id = 'submitQuizBtn';
+            submitBtn.type = 'submit';
+            submitBtn.textContent = 'Submit Quiz';
+            submitBtn.className = 'w-full bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-200 mt-6';
+            quizForm.appendChild(submitBtn);
+
+            quizForm.addEventListener('click', (e) => {
+                if (e.target.classList.contains('show-hint-btn')) {
+                    const index = e.target.getAttribute('data-index');
+                    const hintElement = document.getElementById(`hint-text-${index}`);
+                    if (hintElement) {
+                        hintElement.classList.remove('hidden');
+                        e.target.style.display = 'none';
+                    }
+                }
+            });
+
+            quizForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                let score = 0;
+                currentQuizAttempt = questions.map((q, index) => {
+                    const selected = document.querySelector(`input[name="question-${index}"]:checked`);
+                    const isCorrect = selected ? selected.dataset.isCorrect === 'true' : false;
+                    if (isCorrect) {
+                        score++;
+                    }
+                    return {
+                        ...q,
+                        isCorrect: isCorrect,
+                        userAnswer: selected ? selected.value : null
+                    };
+                });
+                
+                currentQuizScore = (score / questions.length) * 100;
+                quizScoreDisplay.textContent = `${currentQuizScore.toFixed(0)}%`;
+                
+                quizForm.classList.add('hidden');
+                quizResults.classList.remove('hidden');
+            }, { once: true });
+        };
+
+        const renderReviewPage = (quizData) => {
+            quizSection.classList.add('hidden');
+            trackerSection.classList.add('hidden');
+            reviewSection.classList.remove('hidden');
+            reviewTitle.textContent = `Review Quiz`;
+            reviewContentContainer.innerHTML = '';
+            
+            const incorrectQuestions = quizData.attempt.filter(q => !q.isCorrect);
+
+            if (incorrectQuestions.length > 0) {
+                incorrectQuestions.forEach((q, index) => {
+                    // Create a section for the incorrect question and its mini-quiz
+                    const mistakeBlock = document.createElement('div');
+                    mistakeBlock.className = "mb-8";
+                    
+                    // Add the incorrect question details
+                    const mistakeHtml = `
+                        <div class="bg-red-50 p-6 rounded-lg border border-red-200 shadow-md mb-6">
+                            <p class="text-lg font-semibold text-red-800 mb-2">Question: ${q.question}</p>
+                            <p class="text-sm text-gray-700">Your Answer: <span class="font-medium text-red-600">${q.userAnswer || 'No answer selected'}</span></p>
+                            <p class="text-sm text-gray-700">Correct Answer: <span class="font-medium text-green-600">${q.answerOptions.find(opt => opt.isCorrect).text}</span></p>
+                            <p class="text-sm text-gray-600 mt-2"><span class="font-semibold">Explanation:</span> ${q.answerOptions.find(opt => opt.isCorrect).rationale}</p>
+                        </div>
+                    `;
+                    mistakeBlock.innerHTML += mistakeHtml;
+
+                    // Add a heading for the follow-up quiz
+                    const followUpHeading = document.createElement('h3');
+                    followUpHeading.className = "text-xl font-bold text-gray-800 mb-4";
+                    followUpHeading.textContent = `Follow-up Questions for Question ${index + 1}`;
+                    mistakeBlock.appendChild(followUpHeading);
+
+                    // Create the follow-up quiz form
+                    const followUpForm = document.createElement('form');
+                    followUpForm.className = "space-y-6 mb-6";
+                    followUpForm.setAttribute('data-index', index);
+                    
+                    generateFollowUpQuiz(quizData.topic, q.question, followUpForm, index);
+
+                    mistakeBlock.appendChild(followUpForm);
+                    reviewContentContainer.appendChild(mistakeBlock);
+                });
+            } else {
+                reviewContentContainer.innerHTML = '<p class="text-center text-green-700 font-medium">You got all questions correct! No mistakes to review.</p>';
+            }
+        };
+
+        const generateFollowUpQuiz = (topic, incorrectQuestionText, formElement, blockIndex) => {
+            const allQuestions = quizData[topic];
+            
+            const availableQuestions = allQuestions.filter(q => q.question !== incorrectQuestionText);
+            
+            const shuffledQuestions = availableQuestions.sort(() => 0.5 - Math.random());
+            const followUpQuestions = shuffledQuestions.slice(0, 5);
+
+            if (followUpQuestions.length < 5) {
+                formElement.innerHTML = `<p class="text-center text-gray-600">Not enough new questions available for a full follow-up quiz. Please try a different topic.</p>`;
+                return;
+            }
+
+            followUpQuestions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'bg-gray-50 p-6 rounded-lg border border-gray-200 shadow-md';
+                questionDiv.innerHTML = `
+                    <p class="text-xl font-semibold text-gray-800 mb-4">${index + 1}. ${q.question}</p>
+                    <div class="space-y-3">
+                        ${q.answerOptions.map((option) => `
+                            <label class="flex items-center p-3 rounded-lg border border-gray-300 cursor-pointer hover:bg-white transition-colors">
+                                <input type="radio" name="follow-up-question-${blockIndex}-${index}" value="${option.text}" class="mr-3" data-is-correct="${option.isCorrect}">
+                                <span class="text-gray-700">${option.text}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                formElement.appendChild(questionDiv);
+            });
+            
+            const submitBtn = document.createElement('button');
+            submitBtn.type = 'submit';
+            submitBtn.textContent = 'Submit Follow-up Quiz';
+            submitBtn.className = 'w-full bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-200 mt-6';
+            formElement.appendChild(submitBtn);
+
+            formElement.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                let score = 0;
+                const followUpAttempt = followUpQuestions.map((q, index) => {
+                    const selected = formElement.querySelector(`input[name="follow-up-question-${blockIndex}-${index}"]:checked`);
+                    const isCorrect = selected && selected.dataset.isCorrect === 'true';
+                    if (isCorrect) {
+                        score++;
+                    }
+                    return {
+                        ...q,
+                        isCorrect: isCorrect,
+                        userAnswer: selected ? selected.value : null
+                    };
+                });
+
+                const finalScore = (score / followUpQuestions.length) * 100;
+
+                const newQuiz = {
+                    topic: topic,
+                    score: finalScore,
+                    timestamp: new Date().toISOString(),
+                    type: 'follow-up',
+                    attempt: followUpAttempt
+                };
+                userProfile.quizzes = userProfile.quizzes || [];
+                userProfile.quizzes.push(newQuiz);
+                await setDoc(userProfileRef, userProfile);
+
+                const resultDiv = document.createElement('div');
+                resultDiv.className = "mt-4 text-center p-4 rounded-lg shadow-md bg-green-100";
+                resultDiv.innerHTML = `<p class="text-lg font-semibold text-green-700">Follow-up Score: <span class="font-bold">${finalScore.toFixed(0)}%</span></p>`;
+                formElement.parentNode.insertBefore(resultDiv, formElement.nextSibling);
+                formElement.remove();
+            });
+        };
+
+
+        // Event Listeners
+        backToDashboardBtn.addEventListener('click', () => {
+            quizSection.classList.add('hidden');
+            trackerSection.classList.remove('hidden');
+            topicInput.value = '';
+            startQuizBtn.disabled = true;
+        });
+
+        backFromReviewBtn.addEventListener('click', () => {
+            reviewSection.classList.add('hidden');
+            trackerSection.classList.remove('hidden');
+            topicInput.value = '';
+            startQuizBtn.disabled = true;
+        });
+
+        reviewMistakesBtn.addEventListener('click', () => {
+            const currentFullQuizAttempt = { 
+                topic: currentQuizTopic, 
+                attempt: currentQuizAttempt 
+            };
+            renderReviewPage(currentFullQuizAttempt);
+        });
+
+        saveScoreBtn.addEventListener('click', async () => {
+            try {
+                const newQuiz = {
+                    topic: currentQuizTopic,
+                    score: currentQuizScore,
+                    timestamp: new Date().toISOString(),
+                    type: 'initial',
+                    attempt: currentQuizAttempt
+                };
+                userProfile.quizzes = userProfile.quizzes || [];
+                userProfile.quizzes.push(newQuiz);
+                await setDoc(userProfileRef, userProfile);
+                
+                showMessage(`Quiz result saved successfully! Your score for ${currentQuizTopic} was ${currentQuizScore.toFixed(0)}%.`);
+                
+                quizSection.classList.add('hidden');
+                trackerSection.classList.remove('hidden');
+                topicInput.value = '';
+                startQuizBtn.disabled = true;
+            } catch (error) {
+                console.error("Error adding quiz result: ", error);
+                showMessage("Failed to save quiz result. Please try again.");
+            }
+        });
+    </script>
+</body>
+</html>
